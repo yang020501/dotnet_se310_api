@@ -12,3 +12,10 @@
 `
 docker-compose up
 `
+
+### migrate data to database
+- open the project using Visual Studio
+- Set up startup Project to DAL (right click on DAL on Solution Explorer and click "Set as Startup Project"
+- Open Nuget Package Console (go to Tools -> Nuget Package Manager -> Console)
+- In the Nuget Console, using this command to Start Data Migration
+`Update-Database`
