@@ -7,6 +7,7 @@ namespace DAL.RepositoriesManager;
 public interface IRepositoriesManager : IDisposable
 {
     IGenericRepository<User> UserRepository { get; }
+    IGenericRepository<Course> CourseRepository { get; }
  
     DbContext Context { get; }
 

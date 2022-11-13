@@ -4,6 +4,7 @@ using DAL;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,10 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace DAL.Migrations
 {
     [DbContext(typeof(RepositoryContext))]
-    partial class RepositoryContextModelSnapshot : ModelSnapshot
+    [Migration("20221111135833_add-migration AddedCourseModel")]
+    partial class addmigrationAddedCourseModel
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -43,7 +45,7 @@ namespace DAL.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("course");
+                    b.ToTable("Courses");
                 });
 
             modelBuilder.Entity("DAL.Aggregates.User", b =>
@@ -80,16 +82,16 @@ namespace DAL.Migrations
                     b.HasData(
                         new
                         {
-                            Id = new Guid("9cc73429-7f96-41d1-a82a-bb0db4e7d3a4"),
+                            Id = new Guid("e076171e-99b2-4c42-af64-5ac71174ec5b"),
                             Email = "admin@pro.org",
                             FullName = "Super User Admin",
-                            Password = "$2a$11$nGACkMSCIElR1rc.NbDF7udj2jjCx2SfUq9DKM4HMuAlmfIeZZMcK",
+                            Password = "$2a$11$cjN5rHxfpTknx3fvOaJXTezK3SBn381CRXGWrEkm5HdDm6k22wr6e",
                             Role = "admin",
                             Username = "sudo"
                         },
                         new
                         {
-                            Id = new Guid("1f284195-86a2-4f4a-9611-35bb8f0c97f8"),
+                            Id = new Guid("08ec2a4f-ed05-49cb-8b55-3e53beaf1050"),
                             Email = "sample4@sample.sample",
                             FullName = "Sample User Four",
                             Password = "sampass4",

@@ -9,7 +9,7 @@ public class RepositoryContext : DbContext
     private readonly IConfig _config;
 
     public DbSet<User>? Users { get; set; }
-   
+    public DbSet<Course>? Courses { get; set; }
 
     public RepositoryContext(IConfig config)
     {

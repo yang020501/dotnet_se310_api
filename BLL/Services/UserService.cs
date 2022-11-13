@@ -75,7 +75,8 @@ public class UserService : IUserServices
 
         return new AuthenticationResponse
         {
-            Token = accessToken
+            Token = accessToken,
+            Role = user.Role
         };
     }
 
@@ -101,7 +102,7 @@ public class UserService : IUserServices
         return tokenHandler.WriteToken(token);
     }
 
-    private User? GetUserByUsername(string username)
+    public User? GetUserByUsername(string? username)
     {
         if (!_userRepository.Get(user => user.Username == username, null, 1).Any()) return null;
         return _userRepository.Get(user => user.Username == username, null, 1).First();

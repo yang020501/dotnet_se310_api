@@ -74,6 +74,7 @@ builder.Services.AddSingleton(mapper);
 builder.Services.AddScoped<ICommon, Common>();
 builder.Services.AddScoped<ISharedRepositories, SharedRepositories>();
 builder.Services.AddScoped<IUserServices, UserService>();
+builder.Services.AddScoped<ICourseService, CourseService>();
 
 
 builder.Services.AddAuthentication(options =>
