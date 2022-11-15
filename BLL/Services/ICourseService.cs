@@ -11,9 +11,10 @@ namespace BLL.Services
     public interface ICourseService
     {
         public IEnumerable<Course> GetAllCourse();
-        public Guid? GetCourseId_byName(String name);
+        public Guid? GetCourseId_byName(string name);
         public Course CreateCourse(CreateCourseRequest request);
         public Guid DeleteCourse(CourseDTO course);
         public Course EditCourse(CourseDTO course);
+        public Course? GetCourseByName(string name);
     }
 }

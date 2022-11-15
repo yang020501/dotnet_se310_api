@@ -9,12 +9,14 @@ public class RepositoriesManager : IRepositoriesManager
     private readonly DbContext _dbContext;
     private readonly IGenericRepository<User> _userRepository;
     private readonly IGenericRepository<Course> _courseRepository;
+    private readonly IGenericRepository<CourseUser> _courseuserRepository;
 
     public RepositoriesManager(DbContext dbContext)
     {
         _dbContext = dbContext;
         _userRepository = new GenericRepository<User>(dbContext);
         _courseRepository = new GenericRepository<Course>(dbContext);
+        _courseuserRepository = new GenericRepository<CourseUser>(dbContext);
     }
 
     public void Saves()
@@ -26,12 +28,10 @@ public class RepositoriesManager : IRepositoriesManager
 
     public IGenericRepository<User> UserRepository => _userRepository;
     public IGenericRepository<Course> CourseRepository => _courseRepository;
-
+    public IGenericRepository<CourseUser> CourseUserRepository => _courseuserRepository;
 
 
     public DbContext Context => _dbContext;
-
-    
 
     public void Dispose(bool disposing)
     {

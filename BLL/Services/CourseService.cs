@@ -115,6 +115,12 @@ namespace BLL.Services
             }
         }
 
+        public Course? GetCourseByName(string name)
+        {
+            if (!_courseRepository.Get(c => c.Coursename == name, null, 1).Any()) return null;
+            return _courseRepository.Get(c => c.Coursename == name, null, 1).First();
+        }
+
         public Guid? GetCourseId_byName(string name)
         {
             if (!_courseRepository.Get(course => course.Coursename == name, null, 1).Any()) return null;

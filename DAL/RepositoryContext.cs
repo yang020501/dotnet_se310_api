@@ -10,6 +10,7 @@ public class RepositoryContext : DbContext
 
     public DbSet<User>? Users { get; set; }
     public DbSet<Course>? Courses { get; set; }
+    public DbSet<CourseUser>? CourseUsers { get; set; }
 
     public RepositoryContext(IConfig config)
     {

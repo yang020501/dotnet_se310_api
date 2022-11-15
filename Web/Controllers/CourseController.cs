@@ -1,5 +1,6 @@
 ﻿using BLL.DTOs.Courses;
 using BLL.Services;
+using DAL.Aggregates;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Components;
 using Microsoft.AspNetCore.Mvc;
@@ -18,7 +19,7 @@ namespace Presentation.Controllers
             _courseService = courseService;
         }
 
-        [Authorize(Roles = "admin")]
+        [Authorize(Roles = "moderator")]
         [HttpPost, Route("create")]
         public IActionResult CreateCourse([FromBody] CreateCourseRequest createRequest)
         {
@@ -33,7 +34,7 @@ namespace Presentation.Controllers
             }
         }
 
-        [Authorize(Roles = "admin")]
+        [Authorize(Roles = "moderator")]
         [HttpPost, Route("delete")]
         public IActionResult DeleteCourse([FromBody] CourseDTO request)
         {
@@ -48,7 +49,7 @@ namespace Presentation.Controllers
             }
         }
 
-        [Authorize(Roles = "admin")]
+        [Authorize(Roles = "moderator")]
         [HttpPost, Route("update")]
         public IActionResult UpdateCourse([FromBody] CourseDTO request)
         {
@@ -60,6 +61,21 @@ namespace Presentation.Controllers
             catch (Exception e)
             {
                 return BadRequest(e.Message);
+            }
+        }
+
+        [AllowAnonymous]
+        [HttpGet, Route("get-all")]
+        public IActionResult GetAllCourse()
+        {
+            try
+            {
+                IEnumerable<Course> list = _courseService.GetAllCourse();
+                return Ok(list);
+            }
+            catch(Exception e)
+            {
+                return BadRequest(e);
             }
         }
 

@@ -11,6 +11,11 @@ namespace DAL.Aggregates
     [Table("course")]
     public class Course
     {
+        public Course()
+        {
+            this.Users = new HashSet<User>();
+        }
+
         [Key]
         [Column("id")]
         public Guid Id { get; set; }
@@ -19,11 +24,13 @@ namespace DAL.Aggregates
         public string? Coursename { get; set; }
 
         [Column("lecture_id")]
-        [ForeignKey("User")]
+        [ForeignKey("user")]
         public Guid? LectureId { get; set; }
 
         [Column("Course_code")]
         public string? Cousecode { get; set; }
-        
+
+        public virtual ICollection<User> Users { get; set; }
+
     }
 }

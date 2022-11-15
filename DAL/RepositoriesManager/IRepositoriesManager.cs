@@ -8,6 +8,7 @@ public interface IRepositoriesManager : IDisposable
 {
     IGenericRepository<User> UserRepository { get; }
     IGenericRepository<Course> CourseRepository { get; }
+    IGenericRepository<CourseUser> CourseUserRepository { get; }
  
     DbContext Context { get; }
 

@@ -49,10 +49,10 @@ public class MSSQLDbConfig : IConfig
         var userHasTask = new User { Username = "sample4", Password = "sampass4", Email = "sample4@sample.sample", FullName = "Sample User Four", Id = Guid.NewGuid() };
         var admin = new User { Username = "sudo", Password = BCrypt.Net.BCrypt.HashPassword("sudo"), Email = "admin@pro.org", FullName = "Super User Admin", Role="admin", Id = Guid.NewGuid() };
 
-        modelBuilder.Entity<User>().HasData(
-            admin,
-            userHasTask
-            );
+        modelBuilder.Entity<User>().HasData(admin, userHasTask);
+
         modelBuilder.Entity<Course>();
+
+        modelBuilder.Entity<CourseUser>().HasKey(k => new { k.CourseId, k.UserId });
     }
 }
