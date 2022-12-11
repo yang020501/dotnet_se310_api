@@ -21,4 +21,5 @@ public interface IGenericRepository<TEntity> where TEntity : class
     public void Delete(TEntity entityToDelete);
 
     public void Delete(object id);
+
 }

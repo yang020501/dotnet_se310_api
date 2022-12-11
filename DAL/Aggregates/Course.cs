@@ -27,7 +27,7 @@ namespace DAL.Aggregates
         [ForeignKey("user")]
         public Guid? LectureId { get; set; }
 
-        [Column("Course_code")]
+        [Column("course_code")]
         public string? Cousecode { get; set; }
 
         public virtual ICollection<User> Users { get; set; }

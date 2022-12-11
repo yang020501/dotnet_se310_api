@@ -12,5 +12,13 @@ namespace BLL.DTOs.Courses
         public string? Coursename { get; set; }
         public string? Lecturename { get; set; }
         public string? Coursecode { get; set; }
+
+        public CourseDTO(Guid? id, string? coursename, string? lecturename, string? coursecode)
+        {
+            Id = id;
+            Coursename = coursename;
+            Lecturename = lecturename;
+            Coursecode = coursecode;
+        }
     }
 }

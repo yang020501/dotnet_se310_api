@@ -11,8 +11,14 @@ namespace DAL.Aggregates
     public class CourseUser
     {
         [ForeignKey("user")]
+        [Column("user_ref")]
         public Guid UserId { get; set; }
+
         [ForeignKey("course")]
+        [Column("course_ref")]
         public Guid CourseId { get; set; }
+
+        public Course? Course { get; set; }
+        public User? User { get; set; }
     }
 }

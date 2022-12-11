@@ -54,5 +54,6 @@ public class MSSQLDbConfig : IConfig
         modelBuilder.Entity<Course>();
 
         modelBuilder.Entity<CourseUser>().HasKey(k => new { k.CourseId, k.UserId });
+        
     }
 }

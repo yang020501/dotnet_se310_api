@@ -4,6 +4,7 @@ using DAL;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,10 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace DAL.Migrations
 {
     [DbContext(typeof(RepositoryContext))]
-    partial class RepositoryContextModelSnapshot : ModelSnapshot
+    [Migration("20221127144134_AddCousrUserTable")]
+    partial class AddCousrUserTable
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -85,10 +87,6 @@ namespace DAL.Migrations
                         .HasColumnType("uniqueidentifier")
                         .HasColumnName("id");
 
-                    b.Property<string>("Avatar")
-                        .HasColumnType("nvarchar(max)")
-                        .HasColumnName("avatar");
-
                     b.Property<string>("Email")
                         .HasColumnType("nvarchar(max)")
                         .HasColumnName("email");
@@ -116,16 +114,16 @@ namespace DAL.Migrations
                     b.HasData(
                         new
                         {
-                            Id = new Guid("334bfb54-ecf8-440a-9dcd-fa1a64817d39"),
+                            Id = new Guid("f7a859f5-a146-4ae9-9bd8-8d1a2ad45302"),
                             Email = "admin@pro.org",
                             FullName = "Super User Admin",
-                            Password = "$2a$11$UAPTendnfPhZiURvJC9P5ejHMVxQ0N1JYb0fqRYgh08RKIV83aPJm",
+                            Password = "$2a$11$O5PJ1Pv6yQ970Rj8s8iO0.0e03qmWw/pL3LhNSb49vXCEs08Sq4qK",
                             Role = "admin",
                             Username = "sudo"
                         },
                         new
                         {
-                            Id = new Guid("a8190384-f715-45d1-896f-824e60f5324b"),
+                            Id = new Guid("68e688e0-b7ca-4f58-bb44-c00608958e1d"),
                             Email = "sample4@sample.sample",
                             FullName = "Sample User Four",
                             Password = "sampass4",

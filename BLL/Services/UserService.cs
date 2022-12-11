@@ -113,5 +113,104 @@ public class UserService : IUserServices
         return BCrypt.Net.BCrypt.Verify(rawPasword, hashedPassword);
     }
 
+    public IEnumerable<User>? GetAllByRole(string? role)
+    {
+        IEnumerable<User> students = _userRepository.GetAll().Where(p => p.Role == role);
+        return students;
+    }
 
+    public User? GetUserById(string? id)
+    {
+        try
+        {
+            if (!_userRepository.Get(user => user.Id.ToString() == id).Any())
+            {
+                throw new ResourceNotFoundException("UserId is invalid");
+            }
+            return _userRepository.Get(user => user.Id.ToString() == id).FirstOrDefault();
+        }
+        catch(Exception e)
+        {
+            throw new ResourceConflictException(e.Message);
+        }
+    }
+
+    public UserDTO? UpdateUserInfo(UpdateInfoRequest request)
+    {
+        try
+        {
+            if (!_userRepository.Get(user => user.Username == request.Username).Any())
+            {
+                throw new ResourceNotFoundException("UserName is invalid");
+            }
+            var updated_user = _userRepository.Get(user => user.Username == request.Username).FirstOrDefault();
+            #pragma warning disable CS8602 // Dereference of a possibly null reference.
+            updated_user.FullName = request.Fullname;
+            #pragma warning restore CS8602 // Dereference of a possibly null reference.
+            updated_user.Avatar = request.Avatar;
+            updated_user.Email = request.Email;
+
+            _userRepository.Update(updated_user);
+            _sharedRepositories.RepositoriesManager.Saves();
+
+            return new UserDTO(updated_user.Id, updated_user.Username, updated_user.Email, updated_user.FullName, updated_user.Avatar);
+        }
+        catch (Exception e)
+        {
+            throw new ResourceConflictException(e.Message);
+        }
+    }
+
+    public User? ChangePassword(ChangePasswordRequest request)
+    {
+        try
+        {
+            if (!_userRepository.Get(user => user.Username == request.Username).Any())
+            {
+                throw new ResourceNotFoundException("UserName is invalid");
+            }
+
+            var updated_user = _userRepository.Get(user => user.Username == request.Username).FirstOrDefault();
+
+            #pragma warning disable CS8604 // Possible null reference argument.
+            #pragma warning disable CS8602 // Dereference of a possibly null reference.
+            if (!Verify(request.OldPassword, updated_user.Password))
+            {
+                throw new ResourceConflictException("Wrong password");
+            }
+            #pragma warning restore CS8602 // Dereference of a possibly null reference.
+            #pragma warning restore CS8604 // Possible null reference argument.
+
+            updated_user.Password = BCrypt.Net.BCrypt.HashPassword(request.NewPassword);
+
+            _userRepository.Update(updated_user);
+            _sharedRepositories.RepositoriesManager.Saves();
+
+            return updated_user;
+        }
+        catch (Exception e)
+        {
+            throw new ResourceConflictException(e.Message);
+        }
+    }
+
+    public Guid DeleteUserById(Guid? id)
+    {
+        try
+        {
+            if (!_userRepository.Get(user => user.Id == id).Any())
+            {
+                throw new ResourceNotFoundException("UserName is invalid");
+            }
+
+            User user = _userRepository.Get(user => user.Id == id).FirstOrDefault();
+            _userRepository.Delete(id);
+            _sharedRepositories.RepositoriesManager.Saves();
+            return user.Id;
+        }
+        catch (Exception)
+        {
+            throw new ResourceConflictException();
+        }
+    }
 }

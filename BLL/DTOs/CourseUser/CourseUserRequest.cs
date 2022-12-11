@@ -8,7 +8,7 @@ namespace BLL.DTOs.CourseUser
 {
     public class CourseUserRequest
     {
-        public string Coursename;
-        public string Username;
+        public string? CourseName;
+        public string? UserName;
     }
 }

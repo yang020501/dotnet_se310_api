@@ -31,6 +31,9 @@ public class User
     [Column("role")]
     public string? Role { get; set; }
 
+    [Column("avatar")]
+    public string? Avatar { get; set; }
+
     public virtual ICollection<Course> Courses { get; set; }
 
 }

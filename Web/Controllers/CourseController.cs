@@ -19,7 +19,7 @@ namespace Presentation.Controllers
             _courseService = courseService;
         }
 
-        [Authorize(Roles = "moderator")]
+        [Authorize(Roles = "mod")]
         [HttpPost, Route("create")]
         public IActionResult CreateCourse([FromBody] CreateCourseRequest createRequest)
         {
@@ -34,7 +34,7 @@ namespace Presentation.Controllers
             }
         }
 
-        [Authorize(Roles = "moderator")]
+        [Authorize(Roles = "mod")]
         [HttpPost, Route("delete")]
         public IActionResult DeleteCourse([FromBody] CourseDTO request)
         {
@@ -49,7 +49,7 @@ namespace Presentation.Controllers
             }
         }
 
-        [Authorize(Roles = "moderator")]
+        [Authorize(Roles = "mod")]
         [HttpPost, Route("update")]
         public IActionResult UpdateCourse([FromBody] CourseDTO request)
         {
@@ -78,6 +78,8 @@ namespace Presentation.Controllers
                 return BadRequest(e);
             }
         }
+
+
 
     }
 }

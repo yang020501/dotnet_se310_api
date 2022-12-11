@@ -5,6 +5,7 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Presentation.Shared;
 
+
 // For more information on enabling Web API for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
 
 namespace Presentation.Controllers
@@ -24,19 +25,39 @@ namespace Presentation.Controllers
         [HttpPost, Route("login")]
         public IActionResult Login([FromBody] LoginRequest loginRequest)
         {
-
-            return Ok(_userServices.Authenticate(loginRequest));
+            try
+            {
+                return Ok(_userServices.Authenticate(loginRequest));
+            }
+            catch(BaseCustomApplicationException e)
+            {
+                return SharedControllerMethods.HandleExceptions(e, this);             
+            }
+            catch(Exception e)
+            {
+                return BadRequest(e);
+            }
         }
 
         [Authorize(Roles = "admin")]
         [HttpPost, Route("register")]
         public IActionResult Register([FromBody] RegisterRequest registerRequest)
         {
-
-            Guid registeredId = _userServices.Register(registerRequest);
-            return Ok(registeredId);
+            try
+            {
+                Guid registeredId = _userServices.Register(registerRequest);
+                return Ok(registeredId);
+            }
+            catch (BaseCustomApplicationException e)
+            {
+                return SharedControllerMethods.HandleExceptions(e, this);
+            }
+            catch (Exception e)
+            {          
+                return BadRequest(e);
+            }
         }
 
-
+        
     }
 }

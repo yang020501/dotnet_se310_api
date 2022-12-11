@@ -38,13 +38,13 @@ namespace BLL.Services
 
         public CourseUserRespone AddStudentToCourse(CourseUserRequest request)
         {
-            User? student = _userService.GetUserByUsername(request.Username);
+            User? student = _userService.GetUserByUsername(request.UserName);
             if(student == null)
             {
                 throw new ResourceNotFoundException("Username not found");
             }
 
-            Course? course = _courseService.GetCourseByName(request.Coursename);
+            Course? course = _courseService.GetCourseByName(request.CourseName);
             if (course == null)
             {
                 throw new ResourceNotFoundException("Course not found");
@@ -67,7 +67,26 @@ namespace BLL.Services
 
         public CourseUserRespone RemoveStudentFromCourse(CourseUserRequest request)
         {
-            throw new NotImplementedException();
+            User? student = _userService.GetUserByUsername(request.UserName);
+            if (student == null)
+            {
+                throw new ResourceNotFoundException("Username not found");
+            }
+
+            Course? course = _courseService.GetCourseByName(request.CourseName);
+            if (course == null)
+            {
+                throw new ResourceNotFoundException("Course not found");
+            }
+
+            CourseUser courseUser = new CourseUser();
+            courseUser.UserId = student.Id;
+            courseUser.CourseId = course.Id;
+
+            _courseuserRepository.Delete(courseUser);
+            _sharedRepositories.RepositoriesManager.Saves();
+
+            return new CourseUserRespone(student.Id, student.Username, course.Id, course.Coursename);
         }
     }
 }

@@ -62,45 +62,60 @@ namespace BLL.Services
 
                 return newCourse;
             }
-            catch(Exception e)
+            catch(Exception)
             {
-                throw; 
+                throw new ResourceConflictException(); 
             }
 
         }
 
         public Guid DeleteCourse(CourseDTO delete_course)
         {
-            if (!_courseRepository.Get(course1 => course1.Coursename == delete_course.Coursename, null, 1).Any())
+            try
             {
-                throw new ResourceNotFoundException("This course is not exist");
+                if (!_courseRepository.Get(course1 => course1.Coursename == delete_course.Coursename, null, 1).Any())
+                {
+                    throw new ResourceNotFoundException("This course is not exist");
+                }
+
+                Course delete = _courseRepository.Get(course1 => course1.Coursename == delete_course.Coursename, null, 1).First();
+                _courseRepository.Delete(delete);
+                _sharedRepositories.RepositoriesManager.Saves();
+
+                return delete.Id;
             }
-
-            Course delete = _courseRepository.Get(course1 => course1.Coursename == delete_course.Coursename, null, 1).First();
-            _courseRepository.Delete(delete);
-            _sharedRepositories.RepositoriesManager.Saves();
-
-            return delete.Id;
+            catch (Exception)
+            {
+                throw new ResourceConflictException();
+            }
         }
 
         public Course EditCourse(CourseDTO update_version)
         {
-            if (!_courseRepository.Get(course1 => course1.Coursename == update_version.Coursename, null, 1).Any())
+            try
             {
-                throw new ResourceNotFoundException("This course is not exist");
+                if (!_courseRepository.Get(course1 => course1.Coursename == update_version.Coursename, null, 1).Any())
+                {
+                    throw new ResourceNotFoundException("This course is not exist");
+                }
+
+                Course current_course = _courseRepository.Get(course1 => course1.Coursename == update_version.Coursename, null, 1).First();
+                User? lecturer = _userService.GetUserByUsername(update_version.Lecturename);
+
+                current_course.Coursename = update_version.Coursename;
+                #pragma warning disable CS8602 // Dereference of a possibly null reference.
+                current_course.LectureId = lecturer.Id;
+                #pragma warning restore CS8602 // Dereference of a possibly null reference.
+
+                _courseRepository.Update(current_course);
+                _sharedRepositories.RepositoriesManager.Saves();
+
+                return current_course;
             }
-
-            Course current_course = _courseRepository.Get(course1 => course1.Coursename == update_version.Coursename, null, 1).First();        
-            User? lecturer = _userService.GetUserByUsername(update_version.Lecturename);
-
-            current_course.Coursename = update_version.Coursename;
-            current_course.LectureId = lecturer.Id;
-            
-            _courseRepository.Update(current_course);
-            _sharedRepositories.RepositoriesManager.Saves();
-
-            return current_course;
-
+            catch (Exception)
+            {
+                throw new ResourceConflictException();
+            }
         }
 
         public IEnumerable<Course> GetAllCourse()
@@ -109,19 +124,19 @@ namespace BLL.Services
             {
                 return _courseRepository.GetAll();
             }
-            catch (Exception e)
+            catch (Exception)
             {
                 throw new ResourceNotFoundException();
             }
         }
 
-        public Course? GetCourseByName(string name)
+        public Course? GetCourseByName(string? name)
         {
             if (!_courseRepository.Get(c => c.Coursename == name, null, 1).Any()) return null;
             return _courseRepository.Get(c => c.Coursename == name, null, 1).First();
         }
 
-        public Guid? GetCourseId_byName(string name)
+        public Guid? GetCourseId_byName(string? name)
         {
             if (!_courseRepository.Get(course => course.Coursename == name, null, 1).Any()) return null;
             Course found =  _courseRepository.Get(course => course.Coursename == name, null, 1).First();
