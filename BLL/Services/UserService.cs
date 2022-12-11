@@ -135,7 +135,7 @@ public class UserService : IUserServices
         }
     }
 
-    public UserDTO? UpdateUserInfo(UpdateInfoRequest request)
+    public User? UpdateUserInfo(UpdateInfoRequest request)
     {
         try
         {
@@ -153,7 +153,7 @@ public class UserService : IUserServices
             _userRepository.Update(updated_user);
             _sharedRepositories.RepositoriesManager.Saves();
 
-            return new UserDTO(updated_user.Id, updated_user.Username, updated_user.Email, updated_user.FullName, updated_user.Avatar);
+            return updated_user;
         }
         catch (Exception e)
         {

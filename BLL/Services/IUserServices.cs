@@ -16,7 +16,7 @@ public interface IUserServices
 
     User? GetUserById(string? id);
 
-    UserDTO? UpdateUserInfo(UpdateInfoRequest request);
+    User? UpdateUserInfo(UpdateInfoRequest request);
 
     User? ChangePassword(ChangePasswordRequest request);
 
