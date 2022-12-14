@@ -1,5 +1,5 @@
 ﻿using AutoMapper;
-using BLL.DTOs.CourseUser;
+using BLL.DTOs.CourseUsers;
 using DAL.Aggregates;
 using System;
 using System.Collections.Generic;
@@ -13,7 +13,10 @@ namespace BLL.Mapping
     {
         public static void Configure(IMapperConfigurationExpression config)
         {
-            
+            config.CreateMap<CourseUser, CourseUserRespone>();
+            config.CreateMap<CourseUserDTO, CourseUser>();
+            config.CreateMap<CourseUser, CourseUserDTO>();
+            config.CreateMap<List<CourseUser>, List<CourseUserDTO>>();
         }
     }
 }

@@ -11,6 +11,8 @@ public class RepositoryContext : DbContext
     public DbSet<User>? Users { get; set; }
     public DbSet<Course>? Courses { get; set; }
     public DbSet<CourseUser>? CourseUsers { get; set; }
+    public DbSet<Block>? Blocks { get; set; }
+    public DbSet<MarkdownDocument>? MarkdownDocuments { get; set; }
 
     public RepositoryContext(IConfig config)
     {

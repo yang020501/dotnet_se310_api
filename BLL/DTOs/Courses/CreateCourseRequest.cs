@@ -9,7 +9,7 @@ namespace BLL.DTOs.Courses
     public class CreateCourseRequest
     {
         public string? Coursename { get; set; }
-        public string? Lecturename { get; set; }
+        public string? LecturerUserName { get; set; }
         public string? Coursecode { get; set; }
     }
 }

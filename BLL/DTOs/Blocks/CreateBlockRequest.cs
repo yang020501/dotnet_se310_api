@@ -4,11 +4,10 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace BLL.DTOs.CourseUser
+namespace BLL.DTOs.Block
 {
-    public class CourseUserRequest
+    public class CreateBlockRequest
     {
-        public string? CourseName;
-        public string? UserName;
+        public Guid? CourseId;
     }
 }

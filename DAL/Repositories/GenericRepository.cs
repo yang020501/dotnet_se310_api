@@ -1,5 +1,6 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.ChangeTracking;
+using System.Linq;
 using System.Linq.Expressions;
 
 namespace DAL.Repositories;
@@ -46,7 +47,7 @@ public class GenericRepository<TEntity> : IGenericRepository<TEntity> where TEnt
         }
     }
 
-    public IEnumerable<TEntity> GetAll()
+        public IEnumerable<TEntity> GetAll()
     {
         return _dbSet.ToList();
     }

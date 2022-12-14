@@ -9,11 +9,12 @@ using System.Threading.Tasks;
 
 namespace BLL.Mapping
 {
-    public class CourseMappercs
+    public class CourseMapperc
     {
         public static void Configure(IMapperConfigurationExpression config)
         {
             config.CreateMap<Course, CourseDTO>();
+            config.CreateMap<CreateCourseRequest, Course>().AfterMap((source, destination) => destination.Id = Guid.NewGuid());
         }
     }
 }

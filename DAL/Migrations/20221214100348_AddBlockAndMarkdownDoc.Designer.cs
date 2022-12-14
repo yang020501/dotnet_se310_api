@@ -4,6 +4,7 @@ using DAL;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,10 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace DAL.Migrations
 {
     [DbContext(typeof(RepositoryContext))]
-    partial class RepositoryContextModelSnapshot : ModelSnapshot
+    [Migration("20221214100348_AddBlockAndMarkdownDoc")]
+    partial class AddBlockAndMarkdownDoc
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -145,16 +147,16 @@ namespace DAL.Migrations
                     b.HasData(
                         new
                         {
-                            Id = new Guid("8ec2e7a4-7458-4227-b9bf-29aabb9836b1"),
+                            Id = new Guid("47a73024-e720-452f-a55b-c20e7929017e"),
                             Email = "admin@pro.org",
                             FullName = "Super User Admin",
-                            Password = "$2a$11$uuJ/BGMNJR2tVXtBUQwxVOaEbVbHvuK52jVNKxjs6HThtguEJMh46",
+                            Password = "$2a$11$XMmFzVTwivDobXRXWLyUse7hvH1Xffu4hFYgZ/kzNfMtjRyrNaYAy",
                             Role = "admin",
                             Username = "sudo"
                         },
                         new
                         {
-                            Id = new Guid("c1002e10-a7bf-48c2-8bd8-f75964e6b42c"),
+                            Id = new Guid("1abf0dc9-74ea-4e69-ac40-8a03129e8fac"),
                             Email = "sample4@sample.sample",
                             FullName = "Sample User Four",
                             Password = "sampass4",
