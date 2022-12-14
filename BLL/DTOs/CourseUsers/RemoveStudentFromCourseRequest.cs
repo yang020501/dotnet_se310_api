@@ -6,7 +6,9 @@ using System.Threading.Tasks;
 
 namespace BLL.DTOs.CourseUsers
 {
-    internal class RemoveStudentFromCourseRequest
+    public class RemoveStudentFromCourseRequest
     {
+        public Guid? CourseId { get; set; }
+        public List<string?>? StudentnameList { get; set; }
     }
 }
