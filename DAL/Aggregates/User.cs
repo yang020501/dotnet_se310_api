@@ -28,6 +28,9 @@ public class User
     [Column("full_name")]
     public string? FullName { get; set; }
 
+    [Column("date_of_birth")]
+    public DateTime? DateOfBirth { get; set; }
+
     [Column("role")]
     public string? Role { get; set; }
 

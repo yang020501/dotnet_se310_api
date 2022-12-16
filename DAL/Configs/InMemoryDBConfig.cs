@@ -17,7 +17,6 @@ public class InMemoryDBConfig : IConfig
 
         modelBuilder.Entity<User>().HasData(
             new User { Username = "sample", Password = "sampass", Email = "sample@sample.sample", FullName = "Sample User", Id = new("3eaaabc4-746f-47f9-820a-54ad2c4660dd") }
-
             );
         modelBuilder.Entity<User>().HasData(
             new User { Username = "sample2", Password = "sampass2", Email = "sample2@sample.sample", FullName = "Sample User Two", Id = new("5c87461c-8613-425f-89b3-83c7b741361e") }

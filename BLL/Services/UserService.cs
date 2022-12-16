@@ -149,6 +149,7 @@ public class UserService : IUserServices
             #pragma warning restore CS8602 // Dereference of a possibly null reference.
             updated_user.Avatar = request.Avatar;
             updated_user.Email = request.Email;
+            updated_user.DateOfBirth = request.DateOfBirth; 
 
             _userRepository.Update(updated_user);
             _sharedRepositories.RepositoriesManager.Saves();
