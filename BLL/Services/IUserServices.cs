@@ -6,19 +6,21 @@ namespace BLL.Services;
 
 public interface IUserServices
 {
-    Guid Register(RegisterRequest request);
+    public Guid Register(RegisterRequest request);
 
-    IEnumerable<User>? GetAllByRole(string? role);
+    public IEnumerable<User>? GetAllByRole(string? role);
 
-    AuthenticationResponse Authenticate(LoginRequest loginRequest);
+    public AuthenticationResponse Authenticate(LoginRequest loginRequest);
 
-    User? GetUserByUsername(string? username);
+    public User? GetUserByUsername(string? username);
 
-    User? GetUserById(string? id);
+    public User? GetUserById(string? id);
 
-    User? UpdateUserInfo(UpdateInfoRequest request);
+    public User? UpdateUserInfo(UpdateInfoRequest request);
 
-    User? ChangePassword(ChangePasswordRequest request);
+    public User? ChangePassword(ChangePasswordRequest request);
 
-    Guid DeleteUserById(Guid? id);
+    public Guid DeleteUserById(Guid? id);
+
+    public IEnumerable<User>? GetAllUser();
 }

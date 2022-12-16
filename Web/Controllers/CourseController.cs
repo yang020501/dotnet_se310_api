@@ -44,12 +44,12 @@ namespace Presentation.Controllers
 
        
         [Authorize(Roles = "mod")]
-        [HttpDelete, Route("delete")]
-        public IActionResult DeleteCourse([FromBody] CourseDTO request)
+        [HttpDelete, Route("delete/{id:Guid?}")]
+        public IActionResult DeleteCourse(Guid id)
         {
             try
             {
-                var course = _courseService.DeleteCourse(request);
+                var course = _courseService.DeleteCourseById(id);
                 return Ok("Course has been deleted");
             }
             catch (BaseCustomApplicationException e)

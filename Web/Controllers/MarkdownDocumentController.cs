@@ -1,6 +1,7 @@
 ﻿using BLL.DTOs.MarkdownDocuments;
 using BLL.Exceptions;
 using BLL.Services;
+using DAL.Aggregates;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
@@ -21,7 +22,7 @@ namespace Presentation.Controllers
 
         [HttpPost, Route("add-doc")]
         [Authorize(Roles = "lecturer,mod")]
-        public IActionResult AddDocumentIntoBlock(AddDocumentIntoBlockRequest request)
+        public IActionResult AddDocumentIntoBlock([FromBody] MarkdownDocumentDTO request)
         {
             try
             {
@@ -37,13 +38,13 @@ namespace Presentation.Controllers
             }
         }
 
-        [HttpDelete, Route("delete-doc")]
+        [HttpDelete, Route("delete-doc/{id:Guid?}")]
         [Authorize(Roles = "lecturer,mod")]
-        public IActionResult DeleteDocument(DeleteDocumentRequest request)
+        public IActionResult DeleteDocument(Guid id)
         {
             try
             {
-                return Ok(_markdownDocumentService.DeleteDocumentFromBlock(request));
+                return Ok(_markdownDocumentService.DeleteDocumentFromBlockById(id));
             }
             catch (BaseCustomApplicationException e)
             {
@@ -57,7 +58,7 @@ namespace Presentation.Controllers
 
         [HttpPatch, Route("update-doc")]
         [Authorize(Roles = "lecturer,mod")]
-        public IActionResult UpdateDocument(UpdateDocumentRequest request)
+        public IActionResult UpdateDocument([FromBody] UpdateDocumentRequest request)
         {
             try
             {

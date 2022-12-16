@@ -14,6 +14,7 @@ namespace BLL.Mapping
         public static void Configure(IMapperConfigurationExpression config)
         {
             config.CreateMap<MarkdownDocumentDTO, MarkdownDocument>().AfterMap((source, destination) => destination.Id = Guid.NewGuid());
+            config.CreateMap<UpdateDocumentRequest, MarkdownDocument>();
         }
     }
 }

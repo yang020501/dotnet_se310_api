@@ -10,9 +10,9 @@ namespace BLL.Services
 {
     public interface IMarkdownDocumentService
     {
-        public IEnumerable<MarkdownDocument>? AddDocumentToBlock(AddDocumentIntoBlockRequest request);
-        public IEnumerable<Guid?>? DeleteDocumentFromBlock(DeleteDocumentRequest request);
+        public MarkdownDocument? AddDocumentToBlock(MarkdownDocumentDTO request);
+        public Guid? DeleteDocumentFromBlockById(Guid? id);
         public IEnumerable<MarkdownDocument>? GetDocumentFromBlock(Guid? block_id);
-        public IEnumerable<MarkdownDocument>? UpdateDocument(UpdateDocumentRequest request);
+        public MarkdownDocument? UpdateDocument(UpdateDocumentRequest request);     
     }
 }

@@ -28,20 +28,19 @@ namespace BLL.Services
             _markdownDocumentRepository = _sharedRepositories.RepositoriesManager.MarkdownDocumentRepository;
         }
 
-        public IEnumerable<MarkdownDocument>? AddDocumentToBlock(AddDocumentIntoBlockRequest request)
+        public MarkdownDocument? AddDocumentToBlock(MarkdownDocumentDTO request)
         {
             try
             {
-                List<MarkdownDocument> response = new List<MarkdownDocument>();
-                foreach (MarkdownDocumentDTO dTO in request.MarkdownDocumentList)
+                if(request == null)
                 {
-                    MarkdownDocument markdownDocument = _mapper.Map<MarkdownDocument>(dTO);
-                    _markdownDocumentRepository.Insert(markdownDocument);
-                    response.Add(markdownDocument);
+                    throw new ResourceNotFoundException();
                 }
-
+               
+                MarkdownDocument doc = _mapper.Map<MarkdownDocument>(request);
+                _markdownDocumentRepository.Insert(doc);
                 _sharedRepositories.RepositoriesManager.Saves();
-                return response;
+                return doc;                        
             }
             catch (Exception e)
             {
@@ -49,19 +48,19 @@ namespace BLL.Services
             }
         }
 
-        public IEnumerable<Guid?>? DeleteDocumentFromBlock(DeleteDocumentRequest request)
+        public Guid? DeleteDocumentFromBlockById(Guid? id)
         {
             try
             {
-                List<Guid?> response = new List<Guid?>();
-                foreach (MarkdownDocument doc in request.DeleteDocumentList)
-                {                   
-                    _markdownDocumentRepository.Delete(doc);
-                    response.Add(doc.Id);
+                if (!_markdownDocumentRepository.Get(doc => doc.Id == id).Any()) ;
+                {
+                    throw new ResourceNotFoundException();
                 }
 
+                MarkdownDocument doc = _markdownDocumentRepository.Get(doc => doc.Id == id).FirstOrDefault();
+                _markdownDocumentRepository.Delete(doc);
                 _sharedRepositories.RepositoriesManager.Saves();
-                return response;
+                return id;
             }
             catch (Exception e)
             {
@@ -84,19 +83,19 @@ namespace BLL.Services
             }
         }
 
-        public IEnumerable<MarkdownDocument>? UpdateDocument(UpdateDocumentRequest request)
+        public MarkdownDocument? UpdateDocument(UpdateDocumentRequest request)
         {
             try
             {
-                List<MarkdownDocument> response = new List<MarkdownDocument>();
-                foreach (MarkdownDocument doc in request.UpdateDocumentList)
-                {                   
-                    _markdownDocumentRepository.Update(doc);
-                    response.Add(doc);
+                if(request == null)
+                {
+                    throw new ResourceNotFoundException();
                 }
 
+                MarkdownDocument doc = _mapper.Map<MarkdownDocument>(request);
+                _markdownDocumentRepository.Update(doc);
                 _sharedRepositories.RepositoriesManager.Saves();
-                return response;
+                return doc;
             }
             catch (Exception e)
             {

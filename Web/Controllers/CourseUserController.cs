@@ -21,7 +21,7 @@ namespace Presentation.Controllers
 
         [Authorize(Roles = "mod")]
         [HttpPost, Route("add-students")]
-        public IActionResult AddStudentsToCourse(AddStudentToCourseRequest request)
+        public IActionResult AddStudentsToCourse([FromBody] AddStudentToCourseRequest request)
         {
             try
             {
@@ -39,7 +39,7 @@ namespace Presentation.Controllers
 
         [Authorize(Roles = "mod")]
         [HttpDelete, Route("remove-students")]
-        public IActionResult RemoveStudentsFromCourse(RemoveStudentFromCourseRequest request)
+        public IActionResult RemoveStudentsFromCourse([FromBody] RemoveStudentFromCourseRequest request)
         {
             try
             {

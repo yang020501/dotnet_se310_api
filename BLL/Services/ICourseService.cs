@@ -15,7 +15,7 @@ namespace BLL.Services
         public IEnumerable<Course>? GetAssignedCourse(string? userid);
         public Guid? GetCourseIdByName(string name);
         public Course CreateCourse(CreateCourseRequest request);
-        public Guid DeleteCourse(CourseDTO course);
+        public Guid DeleteCourseById(Guid? id);
         public Course EditCourse(CourseDTO course);
         public Course? GetCourseByName(string name);
         public Boolean CheckDuplicateCourseCode(CourseDTO course);

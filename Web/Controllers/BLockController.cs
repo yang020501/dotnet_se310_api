@@ -20,8 +20,8 @@ namespace Presentation.Controllers
 
 
         [HttpPost, Route("create-block")]
-        [Authorize()]
-        public IActionResult CreateBlock(CreateBlockRequest request)
+        [Authorize]
+        public IActionResult CreateBlock([FromBody] CreateBlockRequest request)
         {
             try
             {

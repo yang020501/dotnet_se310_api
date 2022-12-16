@@ -214,4 +214,16 @@ public class UserService : IUserServices
             throw new ResourceConflictException();
         }
     }
+
+    public IEnumerable<User>? GetAllUser()
+    {
+        try
+        {
+            return _userRepository.GetAll();
+        }
+        catch (Exception e)
+        {
+            throw new ResourceNotFoundException(e.Message);
+        }
+    }
 }

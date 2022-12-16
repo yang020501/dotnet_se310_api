@@ -48,7 +48,7 @@ namespace Presentation.Controllers
 
         [Authorize]
         [HttpPatch, Route("info/update-info")]
-        public IActionResult UpdateUserInfo(UpdateInfoRequest request)
+        public IActionResult UpdateUserInfo([FromBody] UpdateInfoRequest request)
         {
             try
             {
@@ -75,7 +75,7 @@ namespace Presentation.Controllers
 
         [Authorize]
         [HttpPatch, Route("info/change-password")]
-        public IActionResult ChangePassword(ChangePasswordRequest request)
+        public IActionResult ChangePassword([FromBody] ChangePasswordRequest request)
         {
             try
             {
@@ -101,12 +101,66 @@ namespace Presentation.Controllers
         }
 
         [Authorize(Roles = "admin")]
-        [HttpDelete, Route("users/{id:Guid}")]
-        public IActionResult DeleteUser(Guid? id)
+        [HttpDelete, Route("users/{id:Guid?}")]
+        public IActionResult DeleteUser(Guid id)
         {
             try
             {
                 return Ok(_userServices.DeleteUserById(id));
+            }
+            catch (BaseCustomApplicationException e)
+            {
+                return SharedControllerMethods.HandleExceptions(e, this);
+            }
+            catch (Exception e)
+            {
+                return BadRequest(e);
+            }
+        }
+
+        [Authorize(Roles = "admin")]
+        [HttpGet, Route("get-all")]
+        public IActionResult GetAllUser()
+        {
+            try
+            {
+                return Ok(_userServices.GetAllUser());
+            }
+            catch (BaseCustomApplicationException e)
+            {
+                return SharedControllerMethods.HandleExceptions(e, this);
+            }
+            catch (Exception e)
+            {
+                return BadRequest(e);
+            }
+        }
+
+        [Authorize(Roles = "mod,admin")]
+        [HttpGet, Route("get-students")]
+        public IActionResult GetAllStudents()
+        {
+            try
+            {
+                return Ok(_userServices.GetAllByRole("student"));
+            }
+            catch (BaseCustomApplicationException e)
+            {
+                return SharedControllerMethods.HandleExceptions(e, this);
+            }
+            catch (Exception e)
+            {
+                return BadRequest(e);
+            }
+        }
+
+        [Authorize(Roles = "mod,admin")]
+        [HttpGet, Route("get-lecturers")]
+        public IActionResult GetAllLecturers()
+        {
+            try
+            {
+                return Ok(_userServices.GetAllByRole("lecturer"));
             }
             catch (BaseCustomApplicationException e)
             {

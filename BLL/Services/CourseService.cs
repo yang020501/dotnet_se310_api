@@ -98,16 +98,16 @@ namespace BLL.Services
 
         }
 
-        public Guid DeleteCourse(CourseDTO delete_course)
+        public Guid DeleteCourseById(Guid? id)
         {
             try
             {
-                if (!_courseRepository.Get(course1 => course1.Coursename == delete_course.Coursename, null, 1).Any())
+                if (!_courseRepository.Get(course1 => course1.Id == id, null, 1).Any())
                 {
                     throw new ResourceNotFoundException("This course is not exist");
                 }
 
-                Course delete = _courseRepository.Get(course1 => course1.Coursename == delete_course.Coursename, null, 1).First();
+                Course delete = _courseRepository.Get(course1 => course1.Id == id, null, 1).First();
                 User lecturer = _userService.GetUserById(delete.LecturerId.ToString());
                 _courseRepository.Delete(delete);    
                 _courseUserService.DeleteAllStudentsFromCourse(delete);
