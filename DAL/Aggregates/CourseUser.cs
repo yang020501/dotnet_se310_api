@@ -18,7 +18,5 @@ namespace DAL.Aggregates
         [Column("course_ref")]
         public Guid? CourseId { get; set; }
 
-        public Course? Course { get; set; }
-        public User? User { get; set; }
     }
 }

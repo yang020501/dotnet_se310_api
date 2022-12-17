@@ -12,8 +12,6 @@ public interface IUserServices
 
     public AuthenticationResponse Authenticate(LoginRequest loginRequest);
 
-    public User? GetUserByUsername(string? username);
-
     public User? GetUserById(string? id);
 
     public User? UpdateUserInfo(UpdateInfoRequest request);

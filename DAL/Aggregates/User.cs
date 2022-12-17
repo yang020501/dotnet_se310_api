@@ -6,10 +6,6 @@ namespace DAL.Aggregates;
 [Table("users")]
 public class User
 {
-    public User()
-    {
-        this.Courses = new HashSet<Course>();
-    }
 
     [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
     [Key]
@@ -36,7 +32,5 @@ public class User
 
     [Column("avatar")]
     public string? Avatar { get; set; }
-
-    public virtual ICollection<Course> Courses { get; set; }
 
 }

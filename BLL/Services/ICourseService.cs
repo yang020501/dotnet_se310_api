@@ -13,13 +13,11 @@ namespace BLL.Services
     {
         public IEnumerable<Course>? GetAllCourse();
         public IEnumerable<Course>? GetAssignedCourse(string? userid);
-        public Guid? GetCourseIdByName(string name);
-        public Course CreateCourse(CreateCourseRequest request);
+        public CreateCourseRespone CreateCourse(CreateCourseRequest request);
         public Guid DeleteCourseById(Guid? id);
         public Course EditCourse(CourseDTO course);
-        public Course? GetCourseByName(string name);
-        public Boolean CheckDuplicateCourseCode(CourseDTO course);
-        public Boolean CheckDuplicateCourseName(CourseDTO course);
+
+   
 
     }
 }

@@ -11,5 +11,6 @@ namespace BLL.Services
     public interface IBlockService
     {
         Block CreaetBlock(CreateBlockRequest? request);
+        Guid? DeleteBlock(Guid? blockId);
     }
 }

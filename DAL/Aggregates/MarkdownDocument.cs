@@ -16,9 +16,9 @@ namespace DAL.Aggregates
         public Guid? Id { get; set; }
 
         [Column("block_id")]
-        public Guid? BlockId;
+        public Guid? BlockId { get; set; }
 
         [Column("markdown")]
-        public string? Markdown;
+        public string? Markdown { get; set; }
     }
 }

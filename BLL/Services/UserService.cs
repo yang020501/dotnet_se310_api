@@ -18,13 +18,15 @@ public class UserService : IUserServices
     private readonly IMapper _mapper;
     private readonly IConfiguration _configuration;
     private readonly IGenericRepository<User> _userRepository;
+    private readonly ICommon _commonService;
 
-    public UserService(ISharedRepositories sharedRepositories, IMapper mapper, IConfiguration configuration)
+    public UserService(ISharedRepositories sharedRepositories, IMapper mapper, IConfiguration configuration, ICommon commonService)
     {
         _sharedRepositories = sharedRepositories;
         _mapper = mapper;
         _configuration = configuration;
         _userRepository = _sharedRepositories.RepositoriesManager.UserRepository;
+        _commonService = commonService;
     }
 
     private static bool CheckRole(string role)
@@ -55,7 +57,7 @@ public class UserService : IUserServices
     public AuthenticationResponse Authenticate(LoginRequest loginRequest)
     {
         if (loginRequest.Username is null || loginRequest.RawPassword is null) throw new UnauthorizedException();
-        User? user = GetUserByUsername(loginRequest.Username);
+        User? user = _commonService.GetUserByUsername(loginRequest.Username);
 
         if (user is null) throw new UnauthorizedException();
 
@@ -101,12 +103,6 @@ public class UserService : IUserServices
 
         return tokenHandler.WriteToken(token);
     }
-
-    public User? GetUserByUsername(string? username)
-    {
-        if (!_userRepository.Get(user => user.Username == username, null, 1).Any()) return null;
-        return _userRepository.Get(user => user.Username == username, null, 1).First();
-    }
     
     private static bool Verify(string rawPasword, string hashedPassword)
     {
@@ -123,11 +119,7 @@ public class UserService : IUserServices
     {
         try
         {
-            if (!_userRepository.Get(user => user.Id.ToString() == id).Any())
-            {
-                throw new ResourceNotFoundException("UserId is invalid");
-            }
-            return _userRepository.Get(user => user.Id.ToString() == id).FirstOrDefault();
+            return _commonService.GetUserById(id);
         }
         catch(Exception e)
         {

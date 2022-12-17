@@ -43,5 +43,10 @@ namespace BLL.Services
                 throw new ResourceConflictException(e.Message);
             }
         }
+
+        public Guid? DeleteBlock(Guid? blockId)
+        {
+            throw new NotImplementedException();
+        }
     }
 }

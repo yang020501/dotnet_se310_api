@@ -54,7 +54,5 @@ namespace Presentation.Controllers
                 return BadRequest(e);
             }
         }
-
-
     }
 }

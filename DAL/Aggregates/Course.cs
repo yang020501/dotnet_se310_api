@@ -10,12 +10,7 @@ namespace DAL.Aggregates
 {
     [Table("course")]
     public class Course
-    {
-        public Course()
-        {
-            this.Users = new HashSet<User>();
-        }
-
+    {        
         [Key]
         [Column("id")]
         public Guid Id { get; set; }
@@ -28,9 +23,7 @@ namespace DAL.Aggregates
         public Guid? LecturerId { get; set; }
 
         [Column("course_code")]
-        public string? Cousecode { get; set; }
-
-        public virtual ICollection<User> Users { get; set; }
+        public string? Coursecode { get; set; }
 
     }
 }

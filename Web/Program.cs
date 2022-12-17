@@ -55,6 +55,10 @@ builder.Services.AddSwaggerGen(
 var mapperConfig = new MapperConfiguration(config =>
 {
     UserMapper.Configure(config);
+    CourseMapper.Configure(config);
+    CourseUserMapper.Configure(config);
+    BlockMapper.Configure(config);
+    MarkdownDocumentMapper.Configure(config);
 });
 IMapper mapper = mapperConfig.CreateMapper();
 
@@ -75,7 +79,9 @@ builder.Services.AddScoped<ICommon, Common>();
 builder.Services.AddScoped<ISharedRepositories, SharedRepositories>();
 builder.Services.AddScoped<IUserServices, UserService>();
 builder.Services.AddScoped<ICourseService, CourseService>();
-
+builder.Services.AddScoped<ICourseUserService, CourseUserService>();
+builder.Services.AddScoped<IBlockService, BlockService>();
+builder.Services.AddScoped<IMarkdownDocumentService, MarkdownDocumentService>();
 
 builder.Services.AddAuthentication(options =>
 {

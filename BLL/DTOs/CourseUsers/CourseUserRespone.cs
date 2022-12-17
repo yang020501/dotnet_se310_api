@@ -8,17 +8,11 @@ namespace BLL.DTOs.CourseUsers
 {
     public class CourseUserRespone
     {
-        public Guid? UserId;
-        public string? UserName;
-        public Guid? CourseId;
-        public string? CourseName;
+        public Guid? UserId { get; set; }
+        public string? UserName { get; set; }
+        public Guid? CourseId { get; set; }
+        public string? CourseName { get; set; }
 
-        public CourseUserRespone(Guid? userId, string? userName, Guid? courseId, string? courseName)
-        {
-            UserId = userId;
-            UserName = userName;
-            CourseId = courseId;
-            CourseName = courseName;
-        }
+
     }
 }

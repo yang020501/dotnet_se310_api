@@ -8,7 +8,7 @@ namespace BLL.DTOs.MarkdownDocuments
 {
     public class MarkdownDocumentDTO
     {
-        public Guid? BlockId;
-        public string? Markdown;
+        public Guid? BlockId { get; set; }
+        public string? Markdown { get; set; }
     }
 }

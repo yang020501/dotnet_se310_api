@@ -19,81 +19,47 @@ namespace BLL.Services
     {
         private readonly ISharedRepositories _sharedRepositories;
         private readonly IMapper _mapper;
-        private readonly IConfiguration _configuration;
         private readonly IGenericRepository<Course> _courseRepository;
-        private readonly UserService _userService;
-        private readonly CourseUserService _courseUserService;
+        private readonly ICommon _commonService;
 
-        public CourseService(ISharedRepositories sharedRepositories, IMapper mapper, IConfiguration configuration)
+        public CourseService(ISharedRepositories sharedRepositories, IMapper mapper, ICommon commonService)
         {
             _sharedRepositories = sharedRepositories;
             _mapper = mapper;
-            _configuration = configuration;
             _courseRepository = _sharedRepositories.RepositoriesManager.CourseRepository;
-            _userService = new UserService(sharedRepositories, mapper, configuration);
-            _courseUserService = new CourseUserService(sharedRepositories, mapper, configuration);
-        }
+            _commonService = commonService;
+        }      
 
-        public bool CheckDuplicateCourseCode(CourseDTO course)
+        public CreateCourseRespone CreateCourse(CreateCourseRequest request)
         {
             try
-            {
-                if(_courseRepository.Get(c => c.Cousecode == course.Coursecode && c.Id != course.Id).Any())
+            {               
+                if (_courseRepository.Get(c => c.Coursename == request.Coursename).Any())
                 {
-                    return true;
-                }
-
-                return false;
-            }
-            catch (Exception e)
-            {
-                throw new ResourceNotFoundException(e.Message);
-            }
-        }
-
-        public bool CheckDuplicateCourseName(CourseDTO course)
-        {
-            try
-            {
-                if (_courseRepository.Get(c => c.Coursename == course.Coursename && c.Id != course.Id).Any())
-                {
-                    return true;
-                }
-
-                return false;
-            }
-            catch (Exception e)
-            {
-                throw new ResourceNotFoundException(e.Message);
-            }
-        }
-
-        public Course CreateCourse(CreateCourseRequest request)
-        {
-            try
-            {
-                var foundCourse = _courseRepository.Get(course => course.Coursename == request.Coursename, null, 1);
-                if (foundCourse.Any())
-                {
-                    throw new InvalidOperationException($"Coursename {request.Coursename} has existed in the current context");
+                    throw new ResourceConflictException();
                 }
 
                 Course newCourse = _mapper.Map<Course>(request);
-                User? lecturer = _userService.GetUserByUsername(request.LecturerUserName);
-                if (lecturer != null)
+                User? lecturer = _commonService.GetUserByUsername(request.LecturerUserName);                                   
+                if (lecturer != null && lecturer.Role == "lecturer")
                 {
-                    newCourse.LecturerId = lecturer.Id; 
-                    _courseUserService.AssignLecturerToCourse(lecturer, newCourse);
+                    newCourse.LecturerId = lecturer.Id;                   
                 }               
-
                 _courseRepository.Insert(newCourse);
                 _sharedRepositories.RepositoriesManager.Saves();
 
-                return newCourse;
+                if (newCourse.LecturerId != null && lecturer is not null)
+                {
+                    _commonService.AssignLecturerToCourse(lecturer, newCourse);
+                }
+
+                var respone = _mapper.Map<CreateCourseRespone>(newCourse);
+
+                return respone;
             }
-            catch(Exception)
+            catch(Exception e)
             {
-                throw new ResourceConflictException(); 
+                throw new ResourceConflictException(e.Message); 
             }
 
         }
@@ -108,10 +74,10 @@ namespace BLL.Services
                 }
 
                 Course delete = _courseRepository.Get(course1 => course1.Id == id, null, 1).First();
-                User lecturer = _userService.GetUserById(delete.LecturerId.ToString());
+                User lecturer = _commonService.GetUserById(delete.LecturerId.ToString());
                 _courseRepository.Delete(delete);    
-                _courseUserService.DeleteAllStudentsFromCourse(delete);
-                _courseUserService.DeleteLecturerFromCourse(lecturer, delete);
+                _commonService.DeleteAllStudentsFromCourse(delete);
+                _commonService.DeleteLecturerFromCourse(lecturer, delete);
                 _sharedRepositories.RepositoriesManager.Saves();
 
                 return delete.Id;
@@ -131,18 +97,23 @@ namespace BLL.Services
                     throw new ResourceNotFoundException("This course is not exist");
                 }
 
-                if (CheckDuplicateCourseName(update_version))
+                if (_commonService.CheckDuplicateCourseName(update_version))
                 {
                     throw new ResourceConflictException("This name is already existed");
                 }
 
-                if (CheckDuplicateCourseCode(update_version))
+                if (_commonService.CheckDuplicateCourseCode(update_version))
                 {
                     throw new ResourceConflictException("This code is already existed");
                 }
 
                 Course current_course = _courseRepository.Get(course1 => course1.Coursename == update_version.Coursename, null, 1).First();
-                User? lecturer = _userService.GetUserById(update_version.LecturerId);
+                User? lecturer = _commonService.GetUserById(update_version.LecturerId);
+
+                if (update_version.LecturerId != null && lecturer is not null)
+                {
+                    _commonService.ChangeLecturerOfCourse(lecturer, current_course);
+                }
 
                 current_course.Coursename = update_version.Coursename;
                 #pragma warning disable CS8602 // Dereference of a possibly null reference.
@@ -177,7 +148,7 @@ namespace BLL.Services
             try
             {
                 #pragma warning disable CS8619 // Nullability of reference types in value doesn't match target type.
-                IEnumerable<CourseUserDTO> result_id_list = _courseUserService.GetAllCourseRefOfUser(userid);
+                IEnumerable<CourseUserDTO> result_id_list = _commonService.GetAllCourseRefOfUser(userid);
                 #pragma warning restore CS8619 // Nullability of reference types in value doesn't match target type.
                 if (result_id_list.Count() == 0)
                 {
@@ -202,20 +173,6 @@ namespace BLL.Services
             {
                 throw new ResourceNotFoundException();
             }
-        }
-
-        public Course? GetCourseByName(string? name)
-        {
-            if (!_courseRepository.Get(c => c.Coursename == name, null, 1).Any()) return null;
-            return _courseRepository.Get(c => c.Coursename == name, null, 1).First();
-        }
-
-        public Guid? GetCourseIdByName(string? name)
-        {
-            if (!_courseRepository.Get(course => course.Coursename == name, null, 1).Any()) return null;
-            Course found =  _courseRepository.Get(course => course.Coursename == name, null, 1).First();
-
-            return found.Id;
-        }
+        }        
     }
 }

@@ -10,6 +10,6 @@ namespace BLL.DTOs.CourseUsers
     public class AddStudentToCourseResponse
     {
         public Guid? CourseId { get; set; }
-        public List<User?>? StudentList;
+        public List<User?>? StudentList { get; set; }
     }
 }

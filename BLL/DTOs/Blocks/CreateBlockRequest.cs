@@ -8,6 +8,6 @@ namespace BLL.DTOs.Block
 {
     public class CreateBlockRequest
     {
-        public Guid? CourseId;
+        public Guid? CourseId { get; set; }
     }
 }

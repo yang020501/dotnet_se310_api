@@ -13,10 +13,8 @@ namespace BLL.Mapping
     {
         public static void Configure(IMapperConfigurationExpression config)
         {
-            config.CreateMap<CourseUser, CourseUserRespone>();
             config.CreateMap<CourseUserDTO, CourseUser>();
-            config.CreateMap<CourseUser, CourseUserDTO>();
-            config.CreateMap<List<CourseUser>, List<CourseUserDTO>>();
+            config.CreateMap<CourseUser, CourseUserDTO>(); 
         }
     }
 }

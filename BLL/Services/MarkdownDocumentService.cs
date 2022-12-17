@@ -28,7 +28,7 @@ namespace BLL.Services
             _markdownDocumentRepository = _sharedRepositories.RepositoriesManager.MarkdownDocumentRepository;
         }
 
-        public MarkdownDocument? AddDocumentToBlock(MarkdownDocumentDTO request)
+        public MarkdownDocumentResponse? AddDocumentToBlock(MarkdownDocumentDTO request)
         {
             try
             {
@@ -40,7 +40,9 @@ namespace BLL.Services
                 MarkdownDocument doc = _mapper.Map<MarkdownDocument>(request);
                 _markdownDocumentRepository.Insert(doc);
                 _sharedRepositories.RepositoriesManager.Saves();
-                return doc;                        
+
+                var response = _mapper.Map<MarkdownDocumentResponse>(doc);
+                return response;                        
             }
             catch (Exception e)
             {
@@ -60,7 +62,7 @@ namespace BLL.Services
                 MarkdownDocument doc = _markdownDocumentRepository.Get(doc => doc.Id == id).FirstOrDefault();
                 _markdownDocumentRepository.Delete(doc);
                 _sharedRepositories.RepositoriesManager.Saves();
-                return id;
+                return doc.Id;
             }
             catch (Exception e)
             {
@@ -68,14 +70,15 @@ namespace BLL.Services
             }
         }
 
-        public IEnumerable<MarkdownDocument>? GetDocumentFromBlock(Guid? block_id)
+        public IEnumerable<MarkdownDocumentResponse>? GetDocumentFromBlock(Guid? block_id)
         {
             try
             {
-                List<MarkdownDocument> response = new List<MarkdownDocument>();
-                response = _markdownDocumentRepository.Get(doc => doc.BlockId == block_id).ToList();
+                List<MarkdownDocument> docs = new List<MarkdownDocument>();
+                docs = _markdownDocumentRepository.Get(doc => doc.BlockId == block_id).ToList();
 
-                return response;
+                List<MarkdownDocumentResponse> responses = _mapper.Map<List<MarkdownDocumentResponse>>(docs);
+                return responses;
             }
             catch (Exception e)
             {
@@ -83,7 +86,7 @@ namespace BLL.Services
             }
         }
 
-        public MarkdownDocument? UpdateDocument(UpdateDocumentRequest request)
+        public MarkdownDocumentResponse? UpdateDocument(UpdateDocumentRequest request)
         {
             try
             {
@@ -95,7 +98,8 @@ namespace BLL.Services
                 MarkdownDocument doc = _mapper.Map<MarkdownDocument>(request);
                 _markdownDocumentRepository.Update(doc);
                 _sharedRepositories.RepositoriesManager.Saves();
-                return doc;
+                var response = _mapper.Map<MarkdownDocumentResponse>(doc);
+                return response;
             }
             catch (Exception e)
             {

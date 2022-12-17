@@ -15,16 +15,14 @@ namespace Presentation.Controllers
     public class CourseController : ControllerBase
     {
         private readonly ICourseService _courseService;
-        private readonly ICourseUserService _courseUserService;
 
-        public CourseController(ICourseService courseService, ICourseUserService courseUserService)
+        public CourseController(ICourseService courseService)
         {
             _courseService = courseService;
-            _courseUserService = courseUserService;
         }
 
         [Authorize(Roles = "mod")]
-        [HttpPost, Route("create")]
+        [HttpPost]
         public IActionResult CreateCourse([FromBody] CreateCourseRequest createRequest)
         {
             try
@@ -44,7 +42,7 @@ namespace Presentation.Controllers
 
        
         [Authorize(Roles = "mod")]
-        [HttpDelete, Route("delete/{id:Guid?}")]
+        [HttpDelete, Route("{id:Guid?}")]
         public IActionResult DeleteCourse(Guid id)
         {
             try
@@ -63,7 +61,7 @@ namespace Presentation.Controllers
         }
 
         [Authorize(Roles = "mod")]
-        [HttpPatch, Route("update")]
+        [HttpPatch]
         public IActionResult UpdateCourse([FromBody] CourseDTO request)
         {
             try

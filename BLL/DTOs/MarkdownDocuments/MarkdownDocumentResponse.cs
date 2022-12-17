@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace BLL.DTOs.MarkdownDocuments
 {
-    public class UpdateDocumentRequest
+    public class MarkdownDocumentResponse
     {
         public Guid? Id { get; set; }
         public Guid? BlockId { get; set; }

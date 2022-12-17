@@ -4,6 +4,7 @@ using DAL;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,10 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace DAL.Migrations
 {
     [DbContext(typeof(RepositoryContext))]
-    partial class RepositoryContextModelSnapshot : ModelSnapshot
+    [Migration("20221217083526_FixDatabase")]
+    partial class FixDatabase
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -80,17 +82,12 @@ namespace DAL.Migrations
                         .HasColumnType("uniqueidentifier")
                         .HasColumnName("id");
 
-                    b.Property<Guid?>("BlockId")
-                        .HasColumnType("uniqueidentifier")
-                        .HasColumnName("block_id");
-
-                    b.Property<string>("Markdown")
-                        .HasColumnType("nvarchar(max)")
-                        .HasColumnName("markdown");
+                    b.Property<Guid?>("BlockId1")
+                        .HasColumnType("uniqueidentifier");
 
                     b.HasKey("Id");
 
-                    b.HasIndex("BlockId");
+                    b.HasIndex("BlockId1");
 
                     b.ToTable("markdown_document");
                 });
@@ -137,19 +134,19 @@ namespace DAL.Migrations
                     b.HasData(
                         new
                         {
-                            Id = new Guid("638ffa27-f3a0-4b4b-8f99-caea7f2cd9b5"),
+                            Id = new Guid("75fe9ae0-4f90-4a58-a12d-d61b2dcc33b2"),
                             Email = "admin@pro.org",
                             FullName = "Super User Admin",
-                            Password = "$2a$11$R0XRR3ek2TCupNNBwcPbQuxQlEWIDKC5RJrAOLPC3mwaiUXNZGdTq",
+                            Password = "$2a$11$3zCRToQc62T6Apq50FpOfO.SF0EjPbyspm8pIQ3VY42216BTlnDKW",
                             Role = "admin",
                             Username = "sudo"
                         },
                         new
                         {
-                            Id = new Guid("feed1d90-e0aa-450e-8873-473c04a7bdb3"),
+                            Id = new Guid("c699e511-bb5f-4b26-9956-625b0bd6facc"),
                             Email = "sample4@sample.sample",
                             FullName = "Sample User Four",
-                            Password = "$2a$11$JEnxePgootd33GqULXJbVOgMxc1YoX/aTl6/FgLh9gVyB0BaYLFYm",
+                            Password = "$2a$11$NX/3DbWrDEuFn3Ua5rgsge7i3hcoe7Zzend3irQbmblPgdn0M/AlW",
                             Username = "sample4"
                         });
                 });
@@ -158,7 +155,7 @@ namespace DAL.Migrations
                 {
                     b.HasOne("DAL.Aggregates.Block", null)
                         .WithMany("Documents")
-                        .HasForeignKey("BlockId");
+                        .HasForeignKey("BlockId1");
                 });
 
             modelBuilder.Entity("DAL.Aggregates.Block", b =>
