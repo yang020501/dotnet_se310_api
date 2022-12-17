@@ -20,12 +20,30 @@ namespace Presentation.Controllers
 
 
         [HttpPost, Route("create-block")]
-        [Authorize]
+        [Authorize(Roles = "lecturer,mod")]
         public IActionResult CreateBlock([FromBody] CreateBlockRequest request)
         {
             try
             {
                 return Ok(_blockService.CreaetBlock(request));
+            }
+            catch (BaseCustomApplicationException e)
+            {
+                return SharedControllerMethods.HandleExceptions(e, this);
+            }
+            catch (Exception e)
+            {
+                return BadRequest(e);
+            }
+        }
+
+        [HttpDelete, Route("delete-block/{id:Guid?}")]
+        [Authorize(Roles = "lecturer,mod")]
+        public IActionResult DeleteBlock(Guid? id)
+        {
+            try
+            {
+                return Ok(_blockService.DeleteBlock(id));
             }
             catch (BaseCustomApplicationException e)
             {

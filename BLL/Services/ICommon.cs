@@ -23,4 +23,9 @@ public interface ICommon
     public CourseUserDTO DeleteLecturerFromCourse(User lecturer, Course course);
     public IEnumerable<CourseUserDTO> DeleteAllStudentsFromCourse(Course course);
     public IEnumerable<CourseUserDTO> GetAllCourseRefOfUser(string? userid);
+
+    //Block:
+
+    //MarkdownDocument:
+    public IEnumerable<Guid?> DeleteAllMarkdownDocFromBlock(Guid? block_id);
 }

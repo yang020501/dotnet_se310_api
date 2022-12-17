@@ -17,6 +17,8 @@ public class Common : ICommon
     private readonly IGenericRepository<User> _userRepository;
     private readonly IGenericRepository<Course> _courseRepository;
     private readonly IGenericRepository<CourseUser> _courseUserRepository;
+    private readonly IGenericRepository<Block> _blockRepository;
+    private readonly IGenericRepository<MarkdownDocument> _markdownDocumentRepository;
 
     public Common(ISharedRepositories sharedRepositories, IMapper mapper, IConfiguration configuration)
     {
@@ -26,6 +28,8 @@ public class Common : ICommon
         _userRepository = _sharedRepositories.RepositoriesManager.UserRepository;
         _courseRepository = _sharedRepositories.RepositoriesManager.CourseRepository;
         _courseUserRepository = _sharedRepositories.RepositoriesManager.CourseUserRepository;
+        _blockRepository = _sharedRepositories.RepositoriesManager.BlockRepository;
+        _markdownDocumentRepository = _sharedRepositories.RepositoriesManager.MarkdownDocumentRepository;
     }
 
     public bool IsUserIdValid(Guid userId)
@@ -220,6 +224,31 @@ public class Common : ICommon
         {
             List<CourseUser> list = _courseUserRepository.Get(cu => cu.UserId.ToString() == userid).ToList();
             return _mapper.Map<List<CourseUserDTO>>(list);
+        }
+        catch (Exception e)
+        {
+            throw new ResourceNotFoundException(e.Message);
+        }
+    }
+
+    public IEnumerable<Guid?> DeleteAllMarkdownDocFromBlock(Guid? block_id)
+    {
+        try
+        {
+            List<MarkdownDocument> delete_list = _markdownDocumentRepository.Get(doc => doc.BlockId == block_id).ToList();
+            List<Guid?> response = new List<Guid?>();
+            if(delete_list != null)
+            {
+                foreach (MarkdownDocument markdownDocument in delete_list)
+                {
+                    _markdownDocumentRepository.Delete(markdownDocument);
+                    response.Add(markdownDocument.Id);
+                }
+                _sharedRepositories.RepositoriesManager.Saves();
+                return response;
+            }
+
+            return null;
         }
         catch (Exception e)
         {

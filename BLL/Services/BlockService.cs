@@ -20,13 +20,15 @@ namespace BLL.Services
         private readonly IMapper _mapper;
         private readonly IConfiguration _configuration;
         private readonly IGenericRepository<Block> _blockRepository;
+        private readonly ICommon _commonService;
 
-        public BlockService(ISharedRepositories sharedRepositories, IMapper mapper, IConfiguration configuration)
+        public BlockService(ISharedRepositories sharedRepositories, IMapper mapper, IConfiguration configuration, ICommon commonService)
         {
             _sharedRepositories = sharedRepositories;
             _mapper = mapper;
             _configuration = configuration;
             _blockRepository = _sharedRepositories.RepositoriesManager.BlockRepository;
+            _commonService = commonService;
         }
 
         public Block CreaetBlock(CreateBlockRequest? request)
@@ -46,7 +48,22 @@ namespace BLL.Services
 
         public Guid? DeleteBlock(Guid? blockId)
         {
-            throw new NotImplementedException();
+            try
+            {
+                if(blockId is not null && _blockRepository.GetById(blockId) is not null)
+                {
+                    _commonService.DeleteAllMarkdownDocFromBlock(blockId);
+                    _blockRepository.Delete(_blockRepository.GetById(blockId));
+                    _sharedRepositories.RepositoriesManager.Saves();
+                    return blockId;
+                }
+                
+                return null;
+            }
+            catch (Exception e)
+            {
+                throw new ResourceConflictException(e.Message);
+            }
         }
     }
 }
