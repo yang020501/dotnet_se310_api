@@ -34,7 +34,7 @@ namespace BLL.Services
         {
             try
             {               
-                if (_courseRepository.Get(c => c.Coursename == request.Coursename).Any())
+                if (_courseRepository.Get(c => c.Coursename == request.Coursename).Any() || _courseRepository.Get(c => c.Coursecode == request.Coursecode).Any())
                 {
                     throw new ResourceConflictException();
                 }
@@ -92,7 +92,7 @@ namespace BLL.Services
         {
             try
             {
-                if (!_courseRepository.Get(course1 => course1.Coursename == update_version.Coursename, null, 1).Any())
+                if (!_courseRepository.Get(c => c.Id == update_version.Id).Any())
                 {
                     throw new ResourceNotFoundException("This course is not exist");
                 }
@@ -107,7 +107,7 @@ namespace BLL.Services
                     throw new ResourceConflictException("This code is already existed");
                 }
 
-                Course current_course = _courseRepository.Get(course1 => course1.Coursename == update_version.Coursename, null, 1).First();
+                Course current_course = _courseRepository.Get(course1 => course1.Id == update_version.Id).First();
                 User? lecturer = _commonService.GetUserById(update_version.LecturerId);
 
                 if (update_version.LecturerId != null && lecturer is not null)

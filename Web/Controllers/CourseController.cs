@@ -67,7 +67,7 @@ namespace Presentation.Controllers
             try
             {
                 var course = _courseService.EditCourse(request);
-                return Ok("Course has been editted");
+                return Ok(course);
             }
             catch (BaseCustomApplicationException e)
             {

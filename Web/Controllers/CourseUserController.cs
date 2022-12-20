@@ -38,7 +38,7 @@ namespace Presentation.Controllers
         }
 
         [Authorize(Roles = "mod")]
-        [HttpDelete, Route("remove-students")]
+        [HttpPatch, Route("remove-students")]
         public IActionResult RemoveStudentsFromCourse([FromBody] RemoveStudentFromCourseRequest request)
         {
             try

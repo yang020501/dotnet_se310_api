@@ -15,7 +15,7 @@ public interface ICommon
     public Guid? GetCourseIdByName(string name);
     public Course? GetCourseByName(string name);
     public Boolean CheckDuplicateCourseCode(CourseDTO course);
-    public Boolean CheckDuplicateCourseName(CourseDTO course);
+    public Boolean CheckDuplicateCourseName(CourseDTO course);    
 
     //CourseUser:
     public CourseUserDTO AssignLecturerToCourse(User lecturer, Course course);
