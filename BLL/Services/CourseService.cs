@@ -108,16 +108,24 @@ namespace BLL.Services
                 }
 
                 Course current_course = _courseRepository.Get(course1 => course1.Id == update_version.Id).First();
-                User? lecturer = _commonService.GetUserById(update_version.LecturerId);
+                User? lecturer = new User();
 
-                if (update_version.LecturerId != null && lecturer is not null)
+                if (update_version.LecturerId != null)
                 {
+                    lecturer = _commonService.GetUserById(update_version.LecturerId);
                     _commonService.ChangeLecturerOfCourse(lecturer, current_course);
+                    current_course.LecturerId = lecturer.Id;
+                }
+                else
+                {
+                    lecturer = _commonService.GetUserById(current_course.LecturerId.ToString());
+                    _commonService.DeleteLecturerFromCourse(lecturer, current_course);
+                    current_course.LecturerId = null;
                 }
 
                 current_course.Coursename = update_version.Coursename;
-                #pragma warning disable CS8602 // Dereference of a possibly null reference.
-                current_course.LecturerId = lecturer.Id;
+                current_course.Coursecode = update_version.Coursecode;
+                #pragma warning disable CS8602 // Dereference of a possibly null reference.             
                 #pragma warning restore CS8602 // Dereference of a possibly null reference.
 
                 _courseRepository.Update(current_course);
