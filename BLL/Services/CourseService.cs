@@ -116,7 +116,7 @@ namespace BLL.Services
                 }
 
                 current_course.Coursename = update_version.Coursename;
-                #pragma warning disable CS8602 // Dereference of a possibly null reference..
+                #pragma warning disable CS8602 // Dereference of a possibly null reference.
                 current_course.LecturerId = lecturer.Id;
                 #pragma warning restore CS8602 // Dereference of a possibly null reference.
 
