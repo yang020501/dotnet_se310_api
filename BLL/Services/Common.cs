@@ -255,4 +255,31 @@ public class Common : ICommon
             throw new ResourceNotFoundException(e.Message);
         }
     }
+
+    public IEnumerable<User> GetStudentsInCourse(Guid? course_id)
+    {
+        try
+        {
+            List<CourseUser> users = _courseUserRepository.Get(cu => cu.CourseId == course_id).ToList();
+            if (users.Count == 0)
+            {
+                return null;
+            }
+
+            List<User> students = new List<User>();
+            foreach (CourseUser cu in users)
+            {
+                if(_userRepository.Get(stu => stu.Id == cu.UserId && stu.Role == "student").Any())
+                {
+                    students.Add(_userRepository.Get(stu => stu.Id == cu.UserId && stu.Role == "student").FirstOrDefault());
+                }
+            }
+
+            return students;
+        }
+        catch (Exception e)
+        {
+            throw new ResourceNotFoundException(e.Message);
+        }
+    }
 }

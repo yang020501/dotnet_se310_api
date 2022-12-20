@@ -13,5 +13,6 @@ namespace BLL.Services
     {            
         public AddStudentToCourseResponse AddStudentsToCourse(AddStudentToCourseRequest request);
         public RemoveStudentFromCourseResponse RemoveStudentsFromCourse(RemoveStudentFromCourseRequest request);
+        public IEnumerable<UserDTO> GetAllStundetsInCourse(Guid? course_id);
     }
 }

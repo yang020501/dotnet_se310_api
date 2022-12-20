@@ -54,5 +54,23 @@ namespace Presentation.Controllers
                 return BadRequest(e);
             }
         }
+
+        [Authorize(Roles = "mod,lecturer")]
+        [HttpGet, Route("course-students/{id:Guid?}")]
+        public IActionResult GetAllStudentOfCourse(Guid? id)
+        {
+            try
+            {
+                return Ok(_courseUserService.GetAllStundetsInCourse(id));
+            }
+            catch (BaseCustomApplicationException e)
+            {
+                return SharedControllerMethods.HandleExceptions(e, this);
+            }
+            catch (Exception e)
+            {
+                return BadRequest(e);
+            }
+        }
     }
 }

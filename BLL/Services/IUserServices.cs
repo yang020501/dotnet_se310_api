@@ -8,17 +8,17 @@ public interface IUserServices
 {
     public Guid Register(RegisterRequest request);
 
-    public IEnumerable<User>? GetAllByRole(string? role);
+    public IEnumerable<UserDTO>? GetAllByRole(string? role);
 
     public AuthenticationResponse Authenticate(LoginRequest loginRequest);
 
-    public User? GetUserById(string? id);
+    public UserDTO? GetUserById(string? id);
 
-    public User? UpdateUserInfo(UpdateInfoRequest request);
+    public UserDTO? UpdateUserInfo(UpdateInfoRequest request);
 
-    public User? ChangePassword(ChangePasswordRequest request);
+    public UserDTO? ChangePassword(ChangePasswordRequest request);
 
     public Guid DeleteUserById(Guid? id);
 
-    public IEnumerable<User>? GetAllUser();
+    public IEnumerable<UserDTO>? GetAllUser();
 }

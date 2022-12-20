@@ -109,17 +109,20 @@ public class UserService : IUserServices
         return BCrypt.Net.BCrypt.Verify(rawPasword, hashedPassword);
     }
 
-    public IEnumerable<User>? GetAllByRole(string? role)
+    public IEnumerable<UserDTO>? GetAllByRole(string? role)
     {
-        IEnumerable<User> students = _userRepository.GetAll().Where(p => p.Role == role);
-        return students;
+        List<User> users = _userRepository.GetAll().Where(p => p.Role == role).ToList();
+
+        List<UserDTO>? response = _mapper.Map<List<UserDTO>>(users);
+
+        return response;
     }
 
-    public User? GetUserById(string? id)
+    public UserDTO? GetUserById(string? id)
     {
         try
         {
-            return _commonService.GetUserById(id);
+            return _mapper.Map<UserDTO>(_commonService.GetUserById(id));
         }
         catch(Exception e)
         {
@@ -127,7 +130,7 @@ public class UserService : IUserServices
         }
     }
 
-    public User? UpdateUserInfo(UpdateInfoRequest request)
+    public UserDTO? UpdateUserInfo(UpdateInfoRequest request)
     {
         try
         {
@@ -146,7 +149,7 @@ public class UserService : IUserServices
             _userRepository.Update(updated_user);
             _sharedRepositories.RepositoriesManager.Saves();
 
-            return updated_user;
+            return _mapper.Map<UserDTO>(updated_user);
         }
         catch (Exception e)
         {
@@ -154,7 +157,7 @@ public class UserService : IUserServices
         }
     }
 
-    public User? ChangePassword(ChangePasswordRequest request)
+    public UserDTO? ChangePassword(ChangePasswordRequest request)
     {
         try
         {
@@ -179,7 +182,7 @@ public class UserService : IUserServices
             _userRepository.Update(updated_user);
             _sharedRepositories.RepositoriesManager.Saves();
 
-            return updated_user;
+            return _mapper.Map<UserDTO>(updated_user);
         }
         catch (Exception e)
         {
@@ -207,11 +210,12 @@ public class UserService : IUserServices
         }
     }
 
-    public IEnumerable<User>? GetAllUser()
+    public IEnumerable<UserDTO>? GetAllUser()
     {
         try
         {
-            return _userRepository.GetAll();
+            List<User> users = _userRepository.GetAll().ToList();
+            return _mapper.Map<List<UserDTO>>(users);
         }
         catch (Exception e)
         {

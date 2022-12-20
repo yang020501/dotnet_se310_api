@@ -54,6 +54,18 @@ namespace BLL.Services
             }
         }
 
+        public IEnumerable<UserDTO> GetAllStundetsInCourse(Guid? course_id)
+        {
+            try
+            {
+                return _mapper.Map<List<UserDTO>>(_commonService.GetStudentsInCourse(course_id));
+            }
+            catch (Exception e)
+            {
+                throw new ResourceNotFoundException(e.Message);
+            }
+        }
+
         public RemoveStudentFromCourseResponse RemoveStudentsFromCourse(RemoveStudentFromCourseRequest request)
         {
             try
