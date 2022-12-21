@@ -73,14 +73,22 @@ namespace BLL.Services
                     throw new ResourceNotFoundException("This course is not exist");
                 }
 
-                Course delete = _courseRepository.Get(course1 => course1.Id == id, null, 1).First();
-                User lecturer = _commonService.GetUserById(delete.LecturerId.ToString());
-                _courseRepository.Delete(delete);    
-                _commonService.DeleteAllStudentsFromCourse(delete);
-                _commonService.DeleteLecturerFromCourse(lecturer, delete);
+                Course delete_course = _courseRepository.Get(course1 => course1.Id == id, null, 1).First();
+                User? lecturer = null;
+                if (delete_course.LecturerId is not null)
+                {
+                    lecturer = _commonService.GetUserById(delete_course.LecturerId.ToString());
+                }
+
+                _commonService.DeleteAllStudentsFromCourse(delete_course);
+                if(lecturer is not null)
+                {
+                    _commonService.DeleteLecturerFromCourse(lecturer, delete_course);
+                }
+                _courseRepository.Delete(delete_course);
                 _sharedRepositories.RepositoriesManager.Saves();
 
-                return delete.Id;
+                return delete_course.Id;
             }
             catch (Exception)
             {

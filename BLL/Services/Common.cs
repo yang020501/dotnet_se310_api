@@ -164,24 +164,23 @@ public class Common : ICommon
         }
     }
 
-    public CourseUserDTO DeleteLecturerFromCourse(User lecturer, Course course)
+    public CourseUserDTO? DeleteLecturerFromCourse(User lecturer, Course course)
     {
         try
         {
-            CourseUser course_user = new CourseUser();
-            course_user.UserId = lecturer.Id;
-            course_user.CourseId = course.Id;
-
-            if (_courseUserRepository.Get(cu => cu.UserId == course_user.UserId && cu.CourseId == course_user.CourseId).Any())
+            if (_courseUserRepository.Get(cu => cu.UserId == lecturer.Id && cu.CourseId == course.Id).Any())
             {
-                _courseUserRepository.Delete(course_user);
+                _courseUserRepository.Delete(_courseUserRepository.Get(cu => cu.UserId == lecturer.Id && cu.CourseId == course.Id).FirstOrDefault());
                 _sharedRepositories.RepositoriesManager.Saves();
-                CourseUserDTO dto = _mapper.Map<CourseUserDTO>(course_user);
+
+                CourseUserDTO dto = new CourseUserDTO();
+                dto.UserId = lecturer.Id;
+                dto.CourseId = course.Id;
 
                 return dto;
             }
 
-            throw new ResourceNotFoundException("There is no ref of this course and user existed");
+            return null;
         }
         catch (Exception e)
         {
@@ -189,12 +188,13 @@ public class Common : ICommon
         }
     }
 
-    public IEnumerable<CourseUserDTO> DeleteAllStudentsFromCourse(Course course)
+    public IEnumerable<CourseUserDTO>? DeleteAllStudentsFromCourse(Course course)
     {
         try
         {
-            List<CourseUser> ref_list = _courseUserRepository.Get(c => c.CourseId == course.Id).ToList();
-            if (ref_list.Any())
+            List<CourseUser> ref_list = new List<CourseUser>();
+            ref_list = _courseUserRepository.Get(c => c.CourseId == course.Id).ToList();
+            if (ref_list.Count() > 0)
             {
                 foreach (CourseUser user in ref_list)
                 {
@@ -209,7 +209,7 @@ public class Common : ICommon
                 return _mapper.Map<List<CourseUserDTO>>(ref_list);
             }
 
-            throw new ResourceNotFoundException();
+            return null;
 
         }
         catch (Exception e)

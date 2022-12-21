@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace BLL.DTOs.CourseUsers
 {
-    internal class GetAllStudentFromCourseRespone
+    public class GetAllStudentFromCourseRespone
     {
     }
 }
