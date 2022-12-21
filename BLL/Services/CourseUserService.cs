@@ -29,20 +29,30 @@ namespace BLL.Services
             _commonService = commonService;
         }       
 
-        public AddStudentToCourseResponse AddStudentsToCourse(AddStudentToCourseRequest request)
+        public AddStudentToCourseResponse? AddStudentsToCourse(AddStudentToCourseRequest request)
         {
             try
             {
                 AddStudentToCourseResponse response = new AddStudentToCourseResponse();
+                response.StudentIdList = new List<Guid>();
                 response.CourseId = request.CourseId;
-                foreach (string username in request.StudentnameList)
+
+                if(request.StudentIdList is not null && request.StudentIdList.Count() == 0)
                 {
-                    User student = _commonService.GetUserByUsername(username);
-                    CourseUser courseUser = new CourseUser();
-                    courseUser.UserId = student.Id;
-                    courseUser.CourseId = request.CourseId;
-                    response.StudentList.Add(student);
-                    _courseuserRepository.Insert(courseUser);
+                    return null;
+                }
+
+                foreach (Guid id in request.StudentIdList)
+                {
+                    User? student = _commonService.GetUserById(id.ToString());
+                    if(student is not null)
+                    {
+                        CourseUser courseUser = new CourseUser();
+                        courseUser.UserId = student.Id;
+                        courseUser.CourseId = request.CourseId;
+                        response.StudentIdList.Add(id);
+                        _courseuserRepository.Insert(courseUser);
+                    }
                 }
                 _sharedRepositories.RepositoriesManager.Saves();
 
@@ -72,11 +82,23 @@ namespace BLL.Services
             {
                 RemoveStudentFromCourseResponse response = new RemoveStudentFromCourseResponse();
                 response.CourseId = request.CourseId;
-                foreach (string username in request.StudentnameList)
+                response.StudentIdList = new List<Guid>();
+                if (request.StudentIdList is not null && request.StudentIdList.Count() == 0)
                 {
-                    User student = _commonService.GetUserByUsername(username);                  
-                    response.StudentList.Add(student);
-                    _courseuserRepository.Delete(_courseuserRepository.Get(cu => cu.UserId == student.Id && cu.CourseId == request.CourseId));
+                    return null;
+                }
+
+                foreach (Guid id in request.StudentIdList)
+                {
+                    User? student = _commonService.GetUserById(id.ToString());
+                    if (student is not null)
+                    {
+                        if (_courseuserRepository.Get(cu => cu.UserId == student.Id && cu.CourseId == request.CourseId).Any())
+                        {
+                            response.StudentIdList.Add(id);
+                            _courseuserRepository.Delete(_courseuserRepository.Get(cu => cu.UserId == student.Id && cu.CourseId == request.CourseId).FirstOrDefault());
+                        }
+                    }
                 }
                 _sharedRepositories.RepositoriesManager.Saves();
 

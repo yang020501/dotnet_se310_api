@@ -1,4 +1,5 @@
-﻿using DAL.Aggregates;
+﻿using BLL.DTOs.Users;
+using DAL.Aggregates;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -10,6 +11,6 @@ namespace BLL.DTOs.CourseUsers
     public class RemoveStudentFromCourseResponse
     {
         public Guid? CourseId { get; set; }
-        public List<User?>? StudentList { get; set; }
+        public List<Guid>? StudentIdList { get; set; }
     }
 }

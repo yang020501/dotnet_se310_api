@@ -9,6 +9,6 @@ namespace BLL.DTOs.CourseUsers
     public class RemoveStudentFromCourseRequest
     {
         public Guid? CourseId { get; set; }
-        public List<string?>? StudentnameList { get; set; }
+        public List<Guid>? StudentIdList { get; set; }
     }
 }
