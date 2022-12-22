@@ -16,6 +16,7 @@ namespace BLL.Mapping
             config.CreateMap<MarkdownDocumentDTO, MarkdownDocument>().AfterMap((source, destination) => destination.Id = Guid.NewGuid());
             config.CreateMap<UpdateDocumentRequest, MarkdownDocument>();
             config.CreateMap<MarkdownDocument, MarkdownDocumentResponse>();
+            config.CreateMap<MarkdownDocument, MarkdownDocumentInBLock>();
         }
     }
 }

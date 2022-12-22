@@ -1,5 +1,6 @@
 ﻿using BLL.DTOs.Courses;
 using BLL.DTOs.CourseUsers;
+using BLL.DTOs.MarkdownDocuments;
 using DAL.Aggregates;
 
 namespace BLL.Services;
@@ -29,4 +30,6 @@ public interface ICommon
 
     //MarkdownDocument:
     public IEnumerable<Guid?> DeleteAllMarkdownDocFromBlock(Guid? block_id);
+    public IEnumerable<MarkdownDocument>? GetAllDocumentFromBlock(Guid? block_id);
+    public bool IsBlockEmpty(Guid? block_id);
 }

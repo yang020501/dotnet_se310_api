@@ -1,6 +1,7 @@
 ﻿using AutoMapper;
 using BLL.Common;
-using BLL.DTOs.Block;
+using BLL.DTOs.Blocks;
+using BLL.DTOs.MarkdownDocuments;
 using BLL.Exceptions;
 using DAL.Aggregates;
 using DAL.Repositories;
@@ -63,6 +64,39 @@ namespace BLL.Services
             catch (Exception e)
             {
                 throw new ResourceConflictException(e.Message);
+            }
+        }
+
+        public IEnumerable<GetBlocksResponse>? GetAllBlocksFromCourse(Guid? courseId)
+        {
+            try
+            {
+                List<GetBlocksResponse> responses = new List<GetBlocksResponse>();
+                if(_blockRepository.Get(block => block.CourseId == courseId).Any())
+                {
+                    List<Block> blocks = _blockRepository.Get(block => block.CourseId == courseId).ToList();
+                    foreach (Block b in blocks)
+                    {
+                        GetBlocksResponse res = new GetBlocksResponse();
+                        res.MarkdownDocuments = new List<MarkdownDocumentInBLock>();
+                        res.Id = b.Id;
+
+                        if(!_commonService.IsBlockEmpty(b.Id))
+                        {
+                            List<MarkdownDocument>? docs = _commonService.GetAllDocumentFromBlock(b.Id).ToList();
+                            res.MarkdownDocuments = _mapper.Map<List<MarkdownDocumentInBLock>>(docs);
+                        }
+                        responses.Add(res);
+                    }
+
+                    return responses;
+                }
+
+                return null;
+            }
+            catch (Exception e)
+            {
+                throw new ResourceNotFoundException(e.Message);
             }
         }
     }

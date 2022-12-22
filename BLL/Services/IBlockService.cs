@@ -1,5 +1,5 @@
 ﻿using DAL.Aggregates;
-using BLL.DTOs.Block;
+using BLL.DTOs.Blocks;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -12,5 +12,6 @@ namespace BLL.Services
     {
         Block CreaetBlock(CreateBlockRequest? request);
         Guid? DeleteBlock(Guid? blockId);
+        IEnumerable<GetBlocksResponse>? GetAllBlocksFromCourse(Guid? courseId);
     }
 }

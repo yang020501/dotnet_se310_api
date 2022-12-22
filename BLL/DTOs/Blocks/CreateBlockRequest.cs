@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace BLL.DTOs.Block
+namespace BLL.DTOs.Blocks
 {
     public class CreateBlockRequest
     {

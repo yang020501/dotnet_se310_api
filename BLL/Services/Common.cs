@@ -282,4 +282,38 @@ public class Common : ICommon
             throw new ResourceNotFoundException(e.Message);
         }
     }
+
+    public IEnumerable<MarkdownDocument>? GetAllDocumentFromBlock(Guid? block_id)
+    {
+        try
+        {
+            if(_markdownDocumentRepository.Get(doc => doc.BlockId == block_id).Any())
+            {
+                return _markdownDocumentRepository.Get(doc => doc.BlockId == block_id).ToList();
+            }
+
+            return null;
+        }
+        catch (Exception e)
+        {
+            throw new ResourceNotFoundException(e.Message);
+        }
+    }
+
+    public bool IsBlockEmpty(Guid? block_id)
+    {
+        try
+        {
+            if (_markdownDocumentRepository.Get(doc => doc.BlockId == block_id).Any())
+            {
+                return false;
+            }
+
+            return true;
+        }
+        catch (Exception e)
+        {
+            throw new ResourceNotFoundException(e.Message);
+        }
+    }
 }

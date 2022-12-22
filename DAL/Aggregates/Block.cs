@@ -21,7 +21,7 @@ namespace DAL.Aggregates
         public Guid? Id { get; set; }
 
         [Column("course_id")]
-        public Guid? CourseId;
+        public Guid? CourseId { get; set; }
 
         public virtual ICollection<MarkdownDocument> Documents { get; set; }
     }

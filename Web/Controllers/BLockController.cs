@@ -1,6 +1,6 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using BLL.DTOs.Block;
+using BLL.DTOs.Blocks;
 using BLL.Services;
 using BLL.Exceptions;
 using Presentation.Shared;
@@ -55,6 +55,23 @@ namespace Presentation.Controllers
             }
         }
 
+        [Authorize(Roles = "lecturer,mod")]
+        [HttpGet, Route("{course_id:Guid?}")]
+        public IActionResult GetBlocksInCourse(Guid? course_id)
+        {
+            try
+            {
+                return Ok(_blockService.GetAllBlocksFromCourse(course_id));
+            }
+            catch (BaseCustomApplicationException e)
+            {
+                return SharedControllerMethods.HandleExceptions(e, this);
+            }
+            catch (Exception e)
+            {
+                return BadRequest(e);
+            }
+        }
 
     }
 }

@@ -1,5 +1,5 @@
 ﻿using AutoMapper;
-using BLL.DTOs.Block;
+using BLL.DTOs.Blocks;
 using DAL.Aggregates;
 using System;
 using System.Collections.Generic;
