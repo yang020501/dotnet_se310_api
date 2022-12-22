@@ -10,6 +10,7 @@ namespace BLL.DTOs.Blocks
     public class GetBlocksResponse
     {
         public Guid? Id { get; set; }
+        public string? Name { get; set; }    
         public List<MarkdownDocumentInBLock>? MarkdownDocuments { get; set; }
     }
 }

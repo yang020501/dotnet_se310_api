@@ -80,6 +80,7 @@ namespace BLL.Services
                         GetBlocksResponse res = new GetBlocksResponse();
                         res.MarkdownDocuments = new List<MarkdownDocumentInBLock>();
                         res.Id = b.Id;
+                        res.Name = b.Name;
 
                         if(!_commonService.IsBlockEmpty(b.Id))
                         {
