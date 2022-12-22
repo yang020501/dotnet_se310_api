@@ -10,7 +10,7 @@ namespace BLL.Services
 {
     public interface IBlockService
     {
-        Block CreaetBlock(CreateBlockRequest? request);
+        GetBlocksResponse? CreaetBlock(CreateBlockRequest? request);
         Guid? DeleteBlock(Guid? blockId);
         IEnumerable<GetBlocksResponse>? GetAllBlocksFromCourse(Guid? courseId);
         Guid? UpdateBlock(UpdateBlockRequest request);

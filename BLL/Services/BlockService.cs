@@ -32,14 +32,20 @@ namespace BLL.Services
             _commonService = commonService;
         }
 
-        public Block CreaetBlock(CreateBlockRequest? request)
+        public GetBlocksResponse? CreaetBlock(CreateBlockRequest? request)
         {
             try
             {
                 Block block = _mapper.Map<Block>(request);
                 _blockRepository.Insert(block);
                 _sharedRepositories.RepositoriesManager.Saves();
-                return block;
+                GetBlocksResponse response = new GetBlocksResponse()
+                {
+                    Id = block.Id,
+                    Name = block.Name,
+                    MarkdownDocuments = new List<MarkdownDocumentInBLock>()
+                };
+                return response;
             }
             catch (Exception e)
             {
