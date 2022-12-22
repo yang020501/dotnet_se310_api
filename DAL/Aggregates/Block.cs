@@ -20,6 +20,9 @@ namespace DAL.Aggregates
         [Column("id")]
         public Guid? Id { get; set; }
 
+        [Column("block_name")]
+        public string? Name { get; set; }
+
         [Column("course_id")]
         public Guid? CourseId { get; set; }
 

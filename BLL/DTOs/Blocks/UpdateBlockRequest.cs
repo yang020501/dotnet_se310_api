@@ -6,9 +6,9 @@ using System.Threading.Tasks;
 
 namespace BLL.DTOs.Blocks
 {
-    public class CreateBlockRequest
+    public class UpdateBlockRequest
     {
+        public Guid? Id { get; set; }
         public string? Name { get; set; }
-        public Guid? CourseId { get; set; }
     }
 }

@@ -13,5 +13,6 @@ namespace BLL.Services
         Block CreaetBlock(CreateBlockRequest? request);
         Guid? DeleteBlock(Guid? blockId);
         IEnumerable<GetBlocksResponse>? GetAllBlocksFromCourse(Guid? courseId);
+        Guid? UpdateBlock(UpdateBlockRequest request);
     }
 }

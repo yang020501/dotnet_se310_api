@@ -99,5 +99,26 @@ namespace BLL.Services
                 throw new ResourceNotFoundException(e.Message);
             }
         }
+
+        public Guid? UpdateBlock(UpdateBlockRequest request)
+        {
+            try
+            {
+                if(_blockRepository.Get(b => b.Id == request.Id).Any())
+                {
+                    Block new_block = _blockRepository.Get(b => b.Id == request.Id).FirstOrDefault();
+                    new_block.Name = request.Name;
+                    _blockRepository.Update(new_block);
+                    _sharedRepositories.RepositoriesManager.Saves();
+                    return request.Id;
+                }
+
+                return null;
+            }
+            catch (Exception e)
+            {
+                throw new ResourceConflictException(e.Message);
+            }
+        }
     }
 }

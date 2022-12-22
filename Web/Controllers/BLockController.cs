@@ -73,5 +73,23 @@ namespace Presentation.Controllers
             }
         }
 
+        [Authorize(Roles = "lecturer,mod")]
+        [HttpPatch, Route("update-block")]
+        public IActionResult UpdateBlock(UpdateBlockRequest request)
+        {
+            try
+            {
+                return Ok(_blockService.UpdateBlock(request));
+            }
+            catch (BaseCustomApplicationException e)
+            {
+                return SharedControllerMethods.HandleExceptions(e, this);
+            }
+            catch (Exception e)
+            {
+                return BadRequest(e);
+            }
+        }
+
     }
 }
