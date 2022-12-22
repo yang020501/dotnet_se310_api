@@ -31,5 +31,6 @@ public interface ICommon
     //MarkdownDocument:
     public IEnumerable<Guid?> DeleteAllMarkdownDocFromBlock(Guid? block_id);
     public IEnumerable<MarkdownDocument>? GetAllDocumentFromBlock(Guid? block_id);
+    public string? GetContentOfDocument(Guid? block_id);
     public bool IsBlockEmpty(Guid? block_id);
 }

@@ -43,7 +43,7 @@ namespace BLL.Services
                 {
                     Id = block.Id,
                     Name = block.Name,
-                    MarkdownDocuments = new List<MarkdownDocumentInBLock>()
+                    MarkdownDocument = _commonService.GetContentOfDocument(block.Id)
                 };
                 return response;
             }
@@ -84,14 +84,13 @@ namespace BLL.Services
                     foreach (Block b in blocks)
                     {
                         GetBlocksResponse res = new GetBlocksResponse();
-                        res.MarkdownDocuments = new List<MarkdownDocumentInBLock>();
                         res.Id = b.Id;
                         res.Name = b.Name;
 
                         if(!_commonService.IsBlockEmpty(b.Id))
                         {
                             List<MarkdownDocument>? docs = _commonService.GetAllDocumentFromBlock(b.Id).ToList();
-                            res.MarkdownDocuments = _mapper.Map<List<MarkdownDocumentInBLock>>(docs);
+                            res.MarkdownDocument = _commonService.GetContentOfDocument(b.Id);
                         }
                         responses.Add(res);
                     }

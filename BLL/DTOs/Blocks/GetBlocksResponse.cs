@@ -11,6 +11,6 @@ namespace BLL.DTOs.Blocks
     {
         public Guid? Id { get; set; }
         public string? Name { get; set; }    
-        public List<MarkdownDocumentInBLock>? MarkdownDocuments { get; set; }
+        public string? MarkdownDocument { get; set; }
     }
 }

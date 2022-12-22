@@ -316,4 +316,21 @@ public class Common : ICommon
             throw new ResourceNotFoundException(e.Message);
         }
     }
+
+    public string? GetContentOfDocument(Guid? block_id)
+    {
+        try
+        {
+            if (!IsBlockEmpty(block_id))
+            {
+                return _markdownDocumentRepository.Get(doc => doc.BlockId == block_id).FirstOrDefault().Markdown;
+            }
+
+            return null;
+        }
+        catch (Exception e)
+        {
+            throw new ResourceNotFoundException(e.Message);
+        }
+    }
 }
