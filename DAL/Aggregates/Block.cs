@@ -10,12 +10,7 @@ namespace DAL.Aggregates
 {
     [Table("block")]
     public class Block
-    {
-        public Block()
-        {
-            this.Documents = new HashSet<MarkdownDocument>();
-        }
-
+    {       
         [Key]
         [Column("id")]
         public Guid? Id { get; set; }
@@ -26,6 +21,7 @@ namespace DAL.Aggregates
         [Column("course_id")]
         public Guid? CourseId { get; set; }
 
-        public virtual ICollection<MarkdownDocument> Documents { get; set; }
+        [Column("markdown_document")]
+        public string? MarkdownDocument { get; set; }
     }
 }

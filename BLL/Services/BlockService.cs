@@ -43,7 +43,7 @@ namespace BLL.Services
                 {
                     Id = block.Id,
                     Name = block.Name,
-                    MarkdownDocument = _commonService.GetContentOfDocument(block.Id)
+                    MarkdownDocument = block.MarkdownDocument
                 };
                 return response;
             }
@@ -86,12 +86,8 @@ namespace BLL.Services
                         GetBlocksResponse res = new GetBlocksResponse();
                         res.Id = b.Id;
                         res.Name = b.Name;
-
-                        if(!_commonService.IsBlockEmpty(b.Id))
-                        {
-                            List<MarkdownDocument>? docs = _commonService.GetAllDocumentFromBlock(b.Id).ToList();
-                            res.MarkdownDocument = _commonService.GetContentOfDocument(b.Id);
-                        }
+                        res.MarkdownDocument = b.MarkdownDocument;
+                        
                         responses.Add(res);
                     }
 
@@ -114,6 +110,7 @@ namespace BLL.Services
                 {
                     Block new_block = _blockRepository.Get(b => b.Id == request.Id).FirstOrDefault();
                     new_block.Name = request.Name;
+                    new_block.MarkdownDocument = request.MarkdownDocument;
                     _blockRepository.Update(new_block);
                     _sharedRepositories.RepositoriesManager.Saves();
                     return request.Id;

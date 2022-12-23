@@ -10,5 +10,6 @@ namespace BLL.DTOs.Blocks
     {
         public string? Name { get; set; }
         public Guid? CourseId { get; set; }
+        public string? MarkdownDocument { get; set; }
     }
 }
