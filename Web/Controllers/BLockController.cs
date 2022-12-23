@@ -55,7 +55,7 @@ namespace Presentation.Controllers
             }
         }
 
-        [Authorize(Roles = "lecturer,mod")]
+        [Authorize(Roles = "lecturer,mod,student")]
         [HttpGet, Route("{course_id:Guid?}")]
         public IActionResult GetBlocksInCourse(Guid? course_id)
         {
