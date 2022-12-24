@@ -43,7 +43,7 @@ namespace DAL.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("block");
+                    b.ToTable("block", (string)null);
                 });
 
             modelBuilder.Entity("DAL.Aggregates.Course", b =>
@@ -67,7 +67,7 @@ namespace DAL.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("course");
+                    b.ToTable("course", (string)null);
                 });
 
             modelBuilder.Entity("DAL.Aggregates.CourseUser", b =>
@@ -82,7 +82,7 @@ namespace DAL.Migrations
 
                     b.HasKey("CourseId", "UserId");
 
-                    b.ToTable("course_user");
+                    b.ToTable("course_user", (string)null);
                 });
 
             modelBuilder.Entity("DAL.Aggregates.MarkdownDocument", b =>
@@ -102,7 +102,7 @@ namespace DAL.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("markdown_document");
+                    b.ToTable("markdown_document", (string)null);
                 });
 
             modelBuilder.Entity("DAL.Aggregates.User", b =>
@@ -142,7 +142,7 @@ namespace DAL.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("users");
+                    b.ToTable("users", (string)null);
 
                     b.HasData(
                         new

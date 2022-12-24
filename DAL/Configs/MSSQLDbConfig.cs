@@ -17,10 +17,10 @@ public class MSSQLDbConfig : IConfig
 
     public MSSQLDbConfig()
     {
-        Server = "127.0.0.1,1404";
-        Username = "SA";
-        Password = "Superadmin123456!1";
-        Database = "se310_db";
+        Server = "sql8004.site4now.net";
+        Username = "db_a92015_phungthanhtu4_admin";
+        Password = "Phungthanhtu!1";
+        Database = "db_a92015_phungthanhtu4";
     }
 
     public string Server { get; set; }
