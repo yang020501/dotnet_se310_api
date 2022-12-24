@@ -147,19 +147,19 @@ namespace DAL.Migrations
                     b.HasData(
                         new
                         {
-                            Id = new Guid("be299c50-8d25-4fab-ac1e-f41cc6b82190"),
+                            Id = new Guid("20c3dbf0-b2ca-4c47-8698-1fff7f278e91"),
                             Email = "admin@pro.org",
                             FullName = "Super User Admin",
-                            Password = "$2a$11$8FySfp6q5/4zrINhc8xhl.KUPskHJj5UhdNcBIQaj05aCE1rn/2N2",
+                            Password = "$2a$11$lkG3/XbZKJPFP8i1kGcbzuk38gHCPaywdwl96qosvWyjzrvfk17YO",
                             Role = "admin",
                             Username = "sudo"
                         },
                         new
                         {
-                            Id = new Guid("7ff0e94d-5104-415f-86ca-afe537d8dad9"),
+                            Id = new Guid("f2e65f73-bc32-4240-b422-120518a64200"),
                             Email = "sample4@sample.sample",
                             FullName = "Sample User Four",
-                            Password = "$2a$11$Wtfo.zgikSUJWaA0fKqGtuy1NXrGs9PgeiMAVwRsT9ccqDZ4/weM6",
+                            Password = "$2a$11$1yF9bNKU9GajC8cQviN/nuidJQbJlFu0JVPcpu.m7.hsLOig1YIsa",
                             Username = "sample4"
                         });
                 });

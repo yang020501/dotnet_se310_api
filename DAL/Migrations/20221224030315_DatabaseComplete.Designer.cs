@@ -12,8 +12,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace DAL.Migrations
 {
     [DbContext(typeof(RepositoryContext))]
-    [Migration("20221217083526_FixDatabase")]
-    partial class FixDatabase
+    [Migration("20221224030315_DatabaseComplete")]
+    partial class DatabaseComplete
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -30,6 +30,18 @@ namespace DAL.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("uniqueidentifier")
                         .HasColumnName("id");
+
+                    b.Property<Guid?>("CourseId")
+                        .HasColumnType("uniqueidentifier")
+                        .HasColumnName("course_id");
+
+                    b.Property<string>("MarkdownDocument")
+                        .HasColumnType("nvarchar(max)")
+                        .HasColumnName("markdown_document");
+
+                    b.Property<string>("Name")
+                        .HasColumnType("nvarchar(max)")
+                        .HasColumnName("block_name");
 
                     b.HasKey("Id");
 
@@ -82,12 +94,15 @@ namespace DAL.Migrations
                         .HasColumnType("uniqueidentifier")
                         .HasColumnName("id");
 
-                    b.Property<Guid?>("BlockId1")
-                        .HasColumnType("uniqueidentifier");
+                    b.Property<Guid?>("BlockId")
+                        .HasColumnType("uniqueidentifier")
+                        .HasColumnName("block_id");
+
+                    b.Property<string>("Markdown")
+                        .HasColumnType("nvarchar(max)")
+                        .HasColumnName("markdown");
 
                     b.HasKey("Id");
-
-                    b.HasIndex("BlockId1");
 
                     b.ToTable("markdown_document");
                 });
@@ -134,33 +149,21 @@ namespace DAL.Migrations
                     b.HasData(
                         new
                         {
-                            Id = new Guid("75fe9ae0-4f90-4a58-a12d-d61b2dcc33b2"),
+                            Id = new Guid("20c3dbf0-b2ca-4c47-8698-1fff7f278e91"),
                             Email = "admin@pro.org",
                             FullName = "Super User Admin",
-                            Password = "$2a$11$3zCRToQc62T6Apq50FpOfO.SF0EjPbyspm8pIQ3VY42216BTlnDKW",
+                            Password = "$2a$11$lkG3/XbZKJPFP8i1kGcbzuk38gHCPaywdwl96qosvWyjzrvfk17YO",
                             Role = "admin",
                             Username = "sudo"
                         },
                         new
                         {
-                            Id = new Guid("c699e511-bb5f-4b26-9956-625b0bd6facc"),
+                            Id = new Guid("f2e65f73-bc32-4240-b422-120518a64200"),
                             Email = "sample4@sample.sample",
                             FullName = "Sample User Four",
-                            Password = "$2a$11$NX/3DbWrDEuFn3Ua5rgsge7i3hcoe7Zzend3irQbmblPgdn0M/AlW",
+                            Password = "$2a$11$1yF9bNKU9GajC8cQviN/nuidJQbJlFu0JVPcpu.m7.hsLOig1YIsa",
                             Username = "sample4"
                         });
-                });
-
-            modelBuilder.Entity("DAL.Aggregates.MarkdownDocument", b =>
-                {
-                    b.HasOne("DAL.Aggregates.Block", null)
-                        .WithMany("Documents")
-                        .HasForeignKey("BlockId1");
-                });
-
-            modelBuilder.Entity("DAL.Aggregates.Block", b =>
-                {
-                    b.Navigation("Documents");
                 });
 #pragma warning restore 612, 618
         }
