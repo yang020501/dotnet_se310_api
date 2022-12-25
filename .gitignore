@@ -4,7 +4,13 @@ DAL.Tests/obj/
 DAL/obj/
 BLL/obj/
 Web/obj/
-
+.DS_Store
+BLL/.DS_Store
+DAL/.DS_Store
+Web/.DS_Store
+CQRSHandler/.DS_Store
+CQRSHandler/obj
+CQRSHandler/bin
 DAL/bin/
 BLL/bin/
 Web/bin/
