@@ -96,7 +96,7 @@ namespace BLL.Services
             }
         }
 
-        public Course EditCourse(CourseDTO update_version)
+        public CourseDTO EditCourse(CourseDTO update_version)
         {
             try
             {
@@ -139,7 +139,7 @@ namespace BLL.Services
                 _courseRepository.Update(current_course);
                 _sharedRepositories.RepositoriesManager.Saves();
 
-                return current_course;
+                return _mapper.Map<CourseDTO>(current_course);
             }
             catch (Exception)
             {
@@ -189,6 +189,24 @@ namespace BLL.Services
             {
                 throw new ResourceNotFoundException();
             }
-        }        
+        }
+
+        public CourseDTO? GetCourseById(Guid? id)
+        {
+            try
+            {
+                if(id is not null)
+                {
+                    Course? course = _courseRepository.GetById(id);
+                    return _mapper.Map<CourseDTO>(course);  
+                }
+
+                return null;
+            }
+            catch (Exception e)
+            {
+                throw new ResourceNotFoundException(e.Message);
+            }
+        }
     }
 }

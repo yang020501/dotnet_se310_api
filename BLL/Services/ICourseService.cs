@@ -15,8 +15,8 @@ namespace BLL.Services
         public IEnumerable<Course>? GetAssignedCourse(string? userid);
         public CreateCourseRespone CreateCourse(CreateCourseRequest request);
         public Guid DeleteCourseById(Guid? id);
-        public Course EditCourse(CourseDTO course);
-
+        public CourseDTO EditCourse(CourseDTO course);
+        public CourseDTO? GetCourseById(Guid? id);
    
 
     }

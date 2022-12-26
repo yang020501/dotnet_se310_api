@@ -21,6 +21,25 @@ namespace Presentation.Controllers
             _courseService = courseService;
         }
 
+        [Authorize(Roles = "lecturer,student")]
+        [HttpGet, Route("{id:Guid?}")]
+        public IActionResult GetCourseById(Guid? id)
+        {
+            try
+            {
+                var course = _courseService.GetCourseById(id);
+                return Ok(course);
+            }
+            catch (BaseCustomApplicationException e)
+            {
+                return Shared.SharedControllerMethods.HandleExceptions(e, this);
+            }
+            catch (Exception e)
+            {
+                return BadRequest(e.Message);
+            }
+        }
+
         [Authorize(Roles = "mod")]
         [HttpPost]
         public IActionResult CreateCourse([FromBody] CreateCourseRequest createRequest)
