@@ -27,6 +27,7 @@ AS
     END
 GO
 
+-- DON'T CALL THIS PROCEDURE because this will be called by another process
 create procedure FinishRegistrationTimeline
 AS 
     BEGIN
@@ -36,6 +37,7 @@ AS
     END
 GO
 
+-- DON'T CALL THIS PROCEDURE because this will be called by another process
 create procedure ResetRegistrationTimeline
 AS 
     BEGIN
