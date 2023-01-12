@@ -10,7 +10,6 @@ namespace CQRSHandler.CommandHandlers
 		public static void Handle(InsertIntoTestTable param, IDapperContext context)
 		{
 			
-
 			using(var connection = context.GetConnection())
 			{
 				var result = connection.Execute(InsertIntoTestTableSql, param);

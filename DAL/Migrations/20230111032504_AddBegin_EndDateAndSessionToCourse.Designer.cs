@@ -4,6 +4,7 @@ using DAL;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,10 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace DAL.Migrations
 {
     [DbContext(typeof(RepositoryContext))]
-    partial class RepositoryContextModelSnapshot : ModelSnapshot
+    [Migration("20230111032504_AddBegin_EndDateAndSessionToCourse")]
+    partial class AddBegin_EndDateAndSessionToCourse
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -64,10 +66,6 @@ namespace DAL.Migrations
                     b.Property<string>("Coursename")
                         .HasColumnType("nvarchar(max)")
                         .HasColumnName("coursename");
-
-                    b.Property<int?>("DateOfWeek")
-                        .HasColumnType("int")
-                        .HasColumnName("date_of_week");
 
                     b.Property<DateTime?>("EndDate")
                         .HasColumnType("datetime2")
@@ -163,19 +161,19 @@ namespace DAL.Migrations
                     b.HasData(
                         new
                         {
-                            Id = new Guid("4f0caf7a-3386-4fa6-9eb2-c536f5b6d4b3"),
+                            Id = new Guid("d965a870-1888-48ac-a872-aba2939c693c"),
                             Email = "admin@pro.org",
                             FullName = "Super User Admin",
-                            Password = "$2a$11$YJadVDVIPAbJ4ZVtwXsTbuQNCpN2Cjv7ooBbB0ATXbi0INGqe1bC6",
+                            Password = "$2a$11$nEmhpH6YxEBdCsfBJTdyT.22WqJlfH8oYmyBNiAkcHdQ.LrD4G77m",
                             Role = "admin",
                             Username = "sudo"
                         },
                         new
                         {
-                            Id = new Guid("060ab550-d22e-49f0-b3b3-33e04b315ce9"),
+                            Id = new Guid("10815fc8-38f1-4305-89e8-c0638e1e58a0"),
                             Email = "sample4@sample.sample",
                             FullName = "Sample User Four",
-                            Password = "$2a$11$O1fK7.yeK337ylAelzDakex253p.05ZtHre9sMFwZmKUyNTKo/GNW",
+                            Password = "$2a$11$YDO5BSgjzN5ta8yjHk.xcefYGE4OKG3Y5Mzkvo74skTFFDBJpGHDe",
                             Username = "sample4"
                         });
                 });
