@@ -1,6 +1,7 @@
 ﻿using BLL.DTOs.Courses;
 using BLL.DTOs.CourseUsers;
 using BLL.DTOs.MarkdownDocuments;
+using BLL.DTOs.RegisterCourses;
 using DAL.Aggregates;
 
 namespace BLL.Services;
@@ -33,4 +34,6 @@ public interface ICommon
     public IEnumerable<MarkdownDocument>? GetAllDocumentFromBlock(Guid? block_id);
     public string? GetContentOfDocument(Guid? block_id);
     public bool IsBlockEmpty(Guid? block_id);
+
+    //RegisterCourse:
 }

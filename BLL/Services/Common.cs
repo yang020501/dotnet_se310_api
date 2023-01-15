@@ -2,10 +2,13 @@
 using BLL.Common;
 using BLL.DTOs.Courses;
 using BLL.DTOs.CourseUsers;
+using BLL.DTOs.RegisterCourses;
 using BLL.Exceptions;
 using DAL.Aggregates;
 using DAL.Repositories;
 using Microsoft.Extensions.Configuration;
+using System.Text.Json;
+using static CQRSHandler.QueryHandlers.FindDuplicatedScheduleHandler;
 
 namespace BLL.Services;
 
@@ -333,4 +336,6 @@ public class Common : ICommon
             throw new ResourceNotFoundException(e.Message);
         }
     }
+
+    
 }

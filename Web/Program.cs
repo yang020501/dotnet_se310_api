@@ -60,6 +60,7 @@ var mapperConfig = new MapperConfiguration(config =>
     BlockMapper.Configure(config);
     MarkdownDocumentMapper.Configure(config);
     TestTableMapper.Configure(config);
+    RegisterCourseMapper.Configure(config);
 });
 IMapper mapper = mapperConfig.CreateMapper();
 
@@ -84,6 +85,7 @@ builder.Services.AddScoped<ICourseUserService, CourseUserService>();
 builder.Services.AddScoped<IBlockService, BlockService>();
 builder.Services.AddScoped<IMarkdownDocumentService, MarkdownDocumentService>();
 builder.Services.AddScoped<ITestTableService, TestTableService>();
+builder.Services.AddScoped<IRegisterCourseService, RegisterCourseService>();
 
 builder.Services.AddAuthentication(options =>
 {

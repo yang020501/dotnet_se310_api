@@ -22,11 +22,7 @@
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Queries\" />
-    <Folder Include="Commands\" />
     <Folder Include="Abstractions\" />
-    <Folder Include="Domains\" />
-    <Folder Include="QueryHandlers\" />
-    <Folder Include="CommandHandlers\" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\DAL\DAL.csproj" />
