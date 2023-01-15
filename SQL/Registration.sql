@@ -23,12 +23,6 @@ go
 
 select * from [dbo].[AvailableCourse]
 go
--- procedures
-    -- add available course for registration
-    -- call this procedure whenever course creation
-
-
-
 
 -- add sample course with session and date
 insert into [dbo].[course] ([id],[coursename],[course_code],[begin_date],[end_date],[session],[date_of_week]) VALUES 
@@ -78,7 +72,11 @@ delete from [dbo].[course] where id = '9594515d-69e4-4252-a323-d5166a6bbae9'
 select * from course
 go
 
+
+-- PROCEDURES
 -- procedure for dinding any duplicated course in a JSON request containing student registration information
+    -- query
+    -- return invalid courses (duplicated in date of week and session)
 create PROCEDURE FindDuplicatedSchedule @Json NVARCHAR(max)
 as 
 begin
@@ -126,7 +124,8 @@ GO
 drop procedure FindDuplicatedSchedule
 go
 
--- procedure for register 
+-- procedure for register
+    -- command
 create procedure RegisterCourse @Json NVARCHAR(max)
 AS
     BEGIN
@@ -146,6 +145,7 @@ drop procedure RegisterCourse
 go
 
 -- procedure for delete registration using json
+    -- command
 create procedure DeleteRegistration @Json NVARCHAR(max)
 as
     BEGIN
@@ -162,6 +162,7 @@ drop procedure DeleteRegistration
 go
 
 -- Procedure for add a course to register, this procedure is called when a new course is created
+    -- command
 create procedure AddAvailableCourse @CourseId UNIQUEIDENTIFIER
 as 
     begin
@@ -174,6 +175,7 @@ as
 go
 
 -- Procedure for Lock Particular course (make it not visible to Register)
+    -- command
 create procedure LockAvailableCourse @CourseId UNIQUEIDENTIFIER
 as 
     BEGIN 
@@ -184,6 +186,7 @@ as
 go
 
 -- Procedure for lock all available course, This procedure is called when finish course registering
+    -- command
 create procedure LockAllCurrentAvailableCourse
 as BEGIN
     update [dbo].[AvailableCourse]
@@ -192,6 +195,8 @@ END
 go
 
 -- Procedure to get available course for registration
+    -- query
+    -- return courses that is available for registration
 create procedure GetAvailableCourses
 as
     begin
@@ -204,8 +209,12 @@ go
 
 
 -- procedure for transfer all registration into course_user
+    -- command
 -- TODO: create a procedure to transfer all course registration result into course_user
 
+
+
+-- TESTING PROCEDURES
 -- test check duplicated 
 declare @Json NVARCHAR(max);
 set @Json = N'
