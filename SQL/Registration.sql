@@ -77,11 +77,12 @@ go
 -- procedure for dinding any duplicated course in a JSON request containing student registration information
     -- query
     -- return invalid courses (duplicated in date of week and session)
+    -- t1.student,t1.courseId as id,t1.begin_date,t1.end_date,t1.[session],t1.[date_of_week]
 create PROCEDURE FindDuplicatedSchedule @Json NVARCHAR(max)
 as 
 begin
-    select t1.student,t1.courseId,t1.begin_date,t1.end_date,t1.[session],t1.[date_of_week] from (
-        select student,j2.courseId,begin_date,course.end_date,course.[session],course.date_of_week  from (select courseId,student from (select * from openjson(@Json) with (
+    select [id],[coursename],[lecture_id],[course_code],t1.[begin_date],t1.[end_date],t1.[session],t1.[date_of_week] from (
+        select *  from (select courseId,student from (select * from openjson(@Json) with (
         student UNIQUEIDENTIFIER '$.student',
         courses NVARCHAR(max) '$.courses' as json
         ) j1
@@ -141,6 +142,7 @@ AS
 
     END
 go
+
 drop procedure RegisterCourse
 go
 
@@ -174,6 +176,9 @@ as
     end
 go
 
+drop procedure AddAvailableCourse
+go
+
 -- Procedure for Lock Particular course (make it not visible to Register)
     -- command
 create procedure LockAvailableCourse @CourseId UNIQUEIDENTIFIER
@@ -185,6 +190,9 @@ as
     END
 go
 
+drop procedure LockAvailableCourse
+go
+
 -- Procedure for lock all available course, This procedure is called when finish course registering
     -- command
 create procedure LockAllCurrentAvailableCourse
@@ -192,6 +200,9 @@ as BEGIN
     update [dbo].[AvailableCourse]
     SET CourseStatus = 1
 END
+go
+
+drop procedure LockAllCurrentAvailableCourse
 go
 
 -- Procedure to get available course for registration
@@ -207,12 +218,24 @@ as
     END
 go
 
+drop procedure GetAvailableCourses
+go
 
 -- procedure for transfer all registration into course_user
     -- command
--- TODO: create a procedure to transfer all course registration result into course_user
+select distinct * from [dbo].[CourseRegistration]
+go
 
+-- procedure for get all current registration of a student
+create procedure GetRegistrationRecords @StudentId UNIQUEIDENTIFIER
+AS
+select  [id],[coursename],[lecture_id],[course_code],[begin_date],[end_date],[session],[date_of_week] from [dbo].[CourseRegistration] t1
+JOIN [dbo].[course] t2 on t1.Course = t2.id
+where Student = @StudentId
+GO
 
+drop procedure GetRegistrationRecords
+go
 
 -- TESTING PROCEDURES
 -- test check duplicated 
@@ -225,6 +248,7 @@ set @Json = N'
     ]
 }'
 EXEC FindDuplicatedSchedule @Json=@Json
+select * from course
 
 -- test Register
 declare @test NVARCHAR(max);
@@ -261,6 +285,8 @@ EXEC LockAllCurrentAvailableCourse
 -- Test get available course for registration
 EXEC GetAvailableCourses
 
+-- test get current registration records
+EXEC GetRegistrationRecords @StudentID = 'c2c3f5ad-03aa-4691-b779-268454132de5'
 
 
 
