@@ -36,7 +36,7 @@ namespace Presentation.Controllers
                     List<Course>? error_list = _registerCourseService.CheckRegisterCourse(registerRequest, resultSid);
                     if(error_list is not null && error_list.Count() > 0)
                     {
-                        return BadRequest(error_list);
+                        return StatusCode(409, error_list);
                     }
                     else
                     {
@@ -122,14 +122,25 @@ namespace Presentation.Controllers
         {
             try
             {
-                List<Course>? listCourses = _registerCourseService.GetAvailableCourses();
-                if(listCourses != null)
+                var claimIdentity = User.Identity as ClaimsIdentity;
+                var sid = claimIdentity?.FindFirst(ClaimTypes.Sid);
+
+                var resultSid = sid?.Value is null ? null : sid.Value;
+                if (resultSid != null)
                 {
-                    return Ok(listCourses);
+                    #pragma warning disable CS8604 // Possible null reference argument.
+                    List<Course>? listCourses = _registerCourseService.GetAvailableCourses(resultSid);
+                    #pragma warning restore CS8604 // Possible null reference argument.
+                    if (listCourses != null)
+                    {
+                        return Ok(listCourses);
+                    }
+
+                    return Ok("No course is available");
                 }
                 else
                 {
-                    return Ok("No courses is available");
+                    return BadRequest("User id is invalided");
                 }
             }
             catch (BaseCustomApplicationException e)

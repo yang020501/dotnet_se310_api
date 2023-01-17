@@ -14,6 +14,6 @@ namespace BLL.Services
         RegisterCourseResponse? RegisterCourseForStudent(RegisterCourseRequest request, string user_id);
         CancelRegistedCourseResponse? CancelRegistedCourse(CancelRegistedCourseRequest request, string user_id);
         List<Course>? GetRegistedCourseOfStudent(string user_id);
-        List<Course>? GetAvailableCourses();
+        List<Course>? GetAvailableCourses(string user_id);
     }
 }

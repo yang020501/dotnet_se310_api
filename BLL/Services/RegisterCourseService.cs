@@ -77,13 +77,35 @@ namespace BLL.Services
             }
         }
 
-        public List<Course>? GetAvailableCourses()
+        public List<Course>? GetAvailableCourses(string user_id)
         {
             try
             {
-                var query = new GetAvailableCourses();
-                List<Course> list = Handle(query, _sharedRepositories.DapperContext).ToList();
-                return list;
+                var queryAC = new GetAvailableCourses();
+                List<Course>? listAvailableCourses = Handle(queryAC, _sharedRepositories.DapperContext).ToList();
+
+                var queryRC = new GetRegistedCourse() { Id = user_id };
+                List<Course>? listRegistedCourses = Handle(queryRC, _sharedRepositories.DapperContext).ToList();
+
+                List<Course>? removeList = new List<Course>();
+
+                foreach (var courseA in listAvailableCourses)
+                {
+                    foreach(var courseR in listRegistedCourses)
+                    {
+                        if (courseA.Id == courseR.Id)
+                        {
+                            removeList.Add(courseA);
+                        }
+                    }
+                }
+
+                foreach(var courseRemove in removeList)
+                {
+                    listAvailableCourses.Remove(courseRemove);
+                }
+
+                return listAvailableCourses;
             }
             catch (Exception e)
             {
