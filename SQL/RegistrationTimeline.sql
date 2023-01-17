@@ -27,6 +27,13 @@ AS
     END
 GO
 
+create procedure GetRegistrationTimeline
+AS
+    BEGIN
+        select top 1 * from [dbo].[RegistrationTimeline]
+    END
+GO
+
 -- DON'T CALL THIS PROCEDURE because this will be called by another process
 create procedure FinishRegistrationTimeline
 AS 
@@ -55,3 +62,5 @@ EXEC SetRegistrationTimeline @StartDate = '20221213' ,@EndDate = '20221215'
 EXEC FinishRegistrationTimeline
 
 EXEC ResetRegistrationTimeline
+
+EXEC GetRegistrationTimeline

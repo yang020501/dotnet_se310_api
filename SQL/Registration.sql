@@ -229,17 +229,18 @@ go
 
 -- procedure for transfer all registration into course_user
     -- command
-create procedure FinalizeRegistration
+create procedure TransferAllRegisteredCourse
 as
     begin
         insert into [dbo].[course_user] (user_ref,course_ref)
         select distinct Student as user_ref ,Course as course_ref from [dbo].[CourseRegistration]
+            where RegistrationStatus = 0
         update [dbo].[CourseRegistration] 
         set RegistrationStatus = 1
     end 
 go
 
-drop procedure FinalizeRegistration
+drop procedure TransferAllRegisteredCourse
 go
 
 
@@ -253,6 +254,28 @@ GO
 
 drop procedure GetRegistrationRecords
 go
+
+-- procedure for start a new registration period
+
+
+
+-- procedure for end registration period
+    -- lock registration timeline
+    -- lock all available course
+    -- transfer all current registration course to course_user
+CREATE procedure FinializeRegistration
+as
+    BEGIN
+        EXEC FinishRegistrationTimeline
+        EXEC LockAllCurrentAvailableCourse
+        EXEC TransferAllRegisteredCourse
+    END
+GO
+
+drop procedure FinializeRegistration
+
+
+
 
 -- TESTING PROCEDURES
 -- test check duplicated 
@@ -312,10 +335,13 @@ EXEC GetAvailableCourses
 EXEC GetRegistrationRecords @Id = 'c2c3f5ad-03aa-4691-b779-268454132de5'
 
 -- test finalize registration
-EXEC FinalizeRegistration
+EXEC TransferAllRegisteredCourse
 
 select * from [dbo].[course_user]
 select * from [dbo].[CourseRegistration]
+
+
+
 
 
 
