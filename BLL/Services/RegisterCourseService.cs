@@ -11,6 +11,7 @@ using System.Text.Json;
 using static CQRSHandler.QueryHandlers.FindDuplicatedScheduleHandler;
 using static CQRSHandler.CommandHandlers.RegisterCourseCommandHandler;
 using static CQRSHandler.CommandHandlers.CancelRegistedCourseHandler;
+using static CQRSHandler.QueryHandlers.GetRegistedCourseHandler;
 using CQRSHandler.Queries;
 using DAL.Aggregates;
 using CQRSHandler.Commands;
@@ -72,6 +73,20 @@ namespace BLL.Services
             catch (Exception e)
             {
                 throw new ResourceNotFoundException(e.Message + ": Error in handel of check register courses");
+            }
+        }
+
+        public List<Course>? GetRegistedCourseOfStudent(string user_id)
+        {
+            try
+            {
+                var query = new GetRegistedCourse() { Id = user_id };
+                List<Course> list = Handle(query, _sharedRepositories.DapperContext).ToList();
+                return list;
+            }
+            catch(Exception e)
+            {
+                throw new ResourceNotFoundException(e.Message);
             }
         }
 

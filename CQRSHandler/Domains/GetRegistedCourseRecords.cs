@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace CQRSHandler.Domains
 {
-    public class CheckRegisterCourseRecords
+    public class GetRegistedCourseRecords
     {
         public Guid? Id { get; set; }
         public string? Coursename { get; set; }

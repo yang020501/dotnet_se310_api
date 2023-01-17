@@ -86,5 +86,34 @@ namespace Presentation.Controllers
                 return BadRequest(e.Message);
             }
         }
+
+        [Authorize(Roles = "student")]
+        [HttpGet, Route("registed-course")]
+        public IActionResult GetRegistedCourseOfStudent()
+        {
+            try
+            {
+                var claimIdentity = User.Identity as ClaimsIdentity;
+                var sid = claimIdentity?.FindFirst(ClaimTypes.Sid);
+
+                var resultSid = sid?.Value is null ? null : sid.Value;
+                if (resultSid != null)
+                {
+                    return Ok(_registerCourseService.GetRegistedCourseOfStudent(resultSid));
+                }
+                else
+                {
+                    return BadRequest("User id is invalided");
+                }
+            }
+            catch (BaseCustomApplicationException e)
+            {
+                return SharedControllerMethods.HandleExceptions(e, this);
+            }
+            catch (Exception e)
+            {
+                return BadRequest(e.Message);
+            }
+        }
     }
 }
