@@ -6,10 +6,14 @@ select * from [dbo].[users]
 -- course registration database
 create table CourseRegistration 
 (
-    Student UNIQUEIDENTIFIER foreign key REFERENCES [dbo].[users](id),
-    Course UNIQUEIDENTIFIER foreign key REFERENCES [dbo].[course](id),
+    Student UNIQUEIDENTIFIER NOT NULL foreign key REFERENCES [dbo].[users](id),
+    Course UNIQUEIDENTIFIER NOT NULL foreign key REFERENCES [dbo].[course](id),
     RegistrationStatus TINYINT
 )
+
+drop table [dbo].[CourseRegistration]
+go
+
 select * from CourseRegistration
 -- available course table
     -- 0. Available
@@ -78,13 +82,14 @@ go
     -- query
     -- return invalid courses (duplicated in date of week and session)
     -- t1.student,t1.courseId as id,t1.begin_date,t1.end_date,t1.[session],t1.[date_of_week]
+
 create PROCEDURE FindDuplicatedSchedule @Json NVARCHAR(max)
 as 
 begin
-    select [id],[coursename],[lecture_id],[course_code],t1.[begin_date],t1.[end_date],t1.[session],t1.[date_of_week] from (
+    select [id] as Id,[coursename] as Coursename,[lecture_id] as LecturerId,[course_code] as Coursecode,t1.[begin_date] as BeginDate,t1.[end_date] as EndDate,t1.[session] as [Session],t1.[date_of_week] as [DateOfWeek] from (
         select *  from (select courseId,student from (select * from openjson(@Json) with (
-        student UNIQUEIDENTIFIER '$.student',
-        courses NVARCHAR(max) '$.courses' as json
+        student UNIQUEIDENTIFIER '$.Student',
+        courses NVARCHAR(max) '$.Courses' as json
         ) j1
         outer apply openjson(j1.courses) with (
             courseId UNIQUEIDENTIFIER '$'
@@ -93,7 +98,7 @@ begin
         union 
         (
             select Course as courseId, Student as student from CourseRegistration
-            where Student = JSON_VALUE(@Json,'$.student')
+            where Student = JSON_VALUE(@Json,'$.Student')
         )) as j2
     join course on j2.courseId = course.id) 
     as t1
@@ -101,8 +106,8 @@ begin
     (
         select [session],[date_of_week], count(*) as qty from 
             (select student,j2.courseId,begin_date,course.end_date,course.[session],course.date_of_week  from (select courseId,student from (select * from openjson(@Json) with (
-            student UNIQUEIDENTIFIER '$.student',
-            courses NVARCHAR(max) '$.courses' as json
+            student UNIQUEIDENTIFIER '$.Student',
+            courses NVARCHAR(max) '$.Courses' as json
             ) j1
             outer apply openjson(j1.courses) with (
                 courseId UNIQUEIDENTIFIER '$'
@@ -111,7 +116,7 @@ begin
             union 
             (
                 select Course as courseId, Student as student from CourseRegistration
-                where Student = JSON_VALUE(@Json,'$.student')
+                where Student = JSON_VALUE(@Json,'$.Student')
             )) as j2
             join course on j2.courseId = course.id  
             ) as t3
@@ -133,8 +138,8 @@ AS
         insert into [dbo].[CourseRegistration]
         select distinct [student] as Student,[courseId] as Course, 0 as [RegistrationStatus] from openjson(@Json) with 
                 (
-                student UNIQUEIDENTIFIER '$.student',
-                courses NVARCHAR(max) '$.courses' as json
+                student UNIQUEIDENTIFIER '$.Student',
+                courses NVARCHAR(max) '$.Courses' as json
                 ) j1
                 outer apply openjson(j1.courses) with (
                     courseId UNIQUEIDENTIFIER '$'
@@ -152,25 +157,26 @@ create procedure DeleteRegistration @Json NVARCHAR(max)
 as
     BEGIN
         delete from [dbo].[CourseRegistration] where 
-        Student = JSON_VALUE(@Json,'$.student')
+        Student = JSON_VALUE(@Json,'$.Student')
         and Course in (
-            select Course from openjson(@Json,'$.courses') with (
+            select Course from openjson(@Json,'$.Courses') with (
             Course UNIQUEIDENTIFIER '$'
         )
     )
     END
 go
+
 drop procedure DeleteRegistration
 go
 
 -- Procedure for add a course to register, this procedure is called when a new course is created
     -- command
-create procedure AddAvailableCourse @CourseId UNIQUEIDENTIFIER
+create procedure AddAvailableCourse @Id UNIQUEIDENTIFIER
 as 
     begin
         insert into [dbo].[AvailableCourse] (Course,CourseStatus) values
         (
-            @courseId,
+            @Id,
             0
         )
     end
@@ -181,12 +187,12 @@ go
 
 -- Procedure for Lock Particular course (make it not visible to Register)
     -- command
-create procedure LockAvailableCourse @CourseId UNIQUEIDENTIFIER
+create procedure LockAvailableCourse @Id UNIQUEIDENTIFIER
 as 
     BEGIN 
         update [dbo].[AvailableCourse]
         SET CourseStatus = 1
-        WHERE Course = @CourseId
+        WHERE Course = @Id
     END
 go
 
@@ -211,7 +217,7 @@ go
 create procedure GetAvailableCourses
 as
     begin
-        select [id],[coursename],[lecture_id],[course_code],[begin_date],[end_date],[session],[date_of_week] from [dbo].[AvailableCourse]
+        select [id],[coursename],[lecture_id] as LecturerId,[course_code] as coursecode,[begin_date] as BeginDate,[end_date] as EndDate,[session],[date_of_week] as DateOfWeek from [dbo].[AvailableCourse]
             join [dbo].[course]
             on [AvailableCourse].[Course] = [Course].[id]
             where CourseStatus = 0
@@ -223,15 +229,26 @@ go
 
 -- procedure for transfer all registration into course_user
     -- command
-select distinct * from [dbo].[CourseRegistration]
+create procedure FinalizeRegistration
+as
+    begin
+        insert into [dbo].[course_user] (user_ref,course_ref)
+        select distinct Student as user_ref ,Course as course_ref from [dbo].[CourseRegistration]
+        update [dbo].[CourseRegistration] 
+        set RegistrationStatus = 1
+    end 
 go
 
+drop procedure FinalizeRegistration
+go
+
+
 -- procedure for get all current registration of a student
-create procedure GetRegistrationRecords @StudentId UNIQUEIDENTIFIER
+create procedure GetRegistrationRecords @Id UNIQUEIDENTIFIER
 AS
-select  [id],[coursename],[lecture_id],[course_code],[begin_date],[end_date],[session],[date_of_week] from [dbo].[CourseRegistration] t1
+select  [id],[coursename],[lecture_id] as LectureId,[course_code] as Coursecode,[begin_date] as BeginDate,[end_date] as EndDate,[session] as [Session],[date_of_week] as DateOfWeek from [dbo].[CourseRegistration] t1
 JOIN [dbo].[course] t2 on t1.Course = t2.id
-where Student = @StudentId
+where Student = @Id
 GO
 
 drop procedure GetRegistrationRecords
@@ -247,16 +264,22 @@ set @Json = N'
           "60e63f23-a73c-41ac-b669-acda565413dd"
     ]
 }'
-EXEC FindDuplicatedSchedule @Json=@Json
+
+declare @temp NVARCHAR(maX)
+set @temp = N'{"Student":"9dfe73b8-28a9-4436-857f-d063f9f55a19","Courses":["c9333905-6ab8-4318-bea5-7bfe00f070ee","b63f3f0d-ea95-46c7-b446-977d7d9ed402","60e63f23-a73c-41ac-b669-acda565413dd"]}'
+
+EXEC FindDuplicatedSchedule @Json=@temp
 select * from course
 
 -- test Register
 declare @test NVARCHAR(max);
 set @test = N'
 {
-    "student":"c2c3f5ad-03aa-4691-b779-268454132de5",
-    "courses":[
-        "c9333905-6ab8-4318-bea5-7bfe00f070ee"
+    "Student":"c2c3f5ad-03aa-4691-b779-268454132de5",
+    "Courses":[
+        "c9333905-6ab8-4318-bea5-7bfe00f070ee",
+         "b63f3f0d-ea95-46c7-b446-977d7d9ed402",
+        "60e63f23-a73c-41ac-b669-acda565413dd"
     ]
 }'
 Exec RegisterCourse @Json = @test
@@ -267,8 +290,8 @@ select * from CourseRegistration
 declare @test NVARCHAR(max);
 set @test = N'
 {
-    "student":"c2c3f5ad-03aa-4691-b779-268454132de5",
-    "courses":[
+    "Student":"c2c3f5ad-03aa-4691-b779-268454132de5",
+    "Courses":[
         "c9333905-6ab8-4318-bea5-7bfe00f070ee",
         "b63f3f0d-ea95-46c7-b446-977d7d9ed402",
         "60e63f23-a73c-41ac-b669-acda565413dd"
@@ -286,7 +309,13 @@ EXEC LockAllCurrentAvailableCourse
 EXEC GetAvailableCourses
 
 -- test get current registration records
-EXEC GetRegistrationRecords @StudentID = 'c2c3f5ad-03aa-4691-b779-268454132de5'
+EXEC GetRegistrationRecords @Id = 'c2c3f5ad-03aa-4691-b779-268454132de5'
+
+-- test finalize registration
+EXEC FinalizeRegistration
+
+select * from [dbo].[course_user]
+select * from [dbo].[CourseRegistration]
 
 
 
