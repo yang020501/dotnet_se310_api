@@ -115,5 +115,31 @@ namespace Presentation.Controllers
                 return BadRequest(e.Message);
             }
         }
+
+        [Authorize(Roles = "student,mod")]
+        [HttpGet, Route("available-courses")]
+        public IActionResult GetAvailableCourses()
+        {
+            try
+            {
+                List<Course>? listCourses = _registerCourseService.GetAvailableCourses();
+                if(listCourses != null)
+                {
+                    return Ok(listCourses);
+                }
+                else
+                {
+                    return Ok("No courses is available");
+                }
+            }
+            catch (BaseCustomApplicationException e)
+            {
+                return SharedControllerMethods.HandleExceptions(e, this);
+            }
+            catch (Exception e)
+            {
+                return BadRequest(e.Message);
+            }
+        }
     }
 }

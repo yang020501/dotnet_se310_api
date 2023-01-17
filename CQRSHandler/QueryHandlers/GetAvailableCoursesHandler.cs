@@ -10,19 +10,19 @@ using System.Threading.Tasks;
 
 namespace CQRSHandler.QueryHandlers
 {
-    public class GetRegistedCourseHandler
+    public class GetAvailableCoursesHandler
     {
-        public static IEnumerable<Course> Handle(GetRegistedCourse Id, IDapperContext context)
+        public static IEnumerable<Course> Handle(GetAvailableCourses query, IDapperContext context)
         {
             using (var connection = context.GetConnection())
             {
-                var result = connection.Query<Course>(GetRegistationRecordsSql, Id);
+                var result = connection.Query<Course>(GetAvailableCoursesSql);
 
                 return result.ToList();
 
             }
         }
 
-        private const string GetRegistationRecordsSql = "EXEC GetRegistrationRecords @Id";
+        private const string GetAvailableCoursesSql = "EXEC GetAvailableCourses";
     }
 }
