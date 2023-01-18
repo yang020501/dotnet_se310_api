@@ -13,9 +13,12 @@ using static CQRSHandler.CommandHandlers.RegisterCourseCommandHandler;
 using static CQRSHandler.CommandHandlers.CancelRegistedCourseHandler;
 using static CQRSHandler.QueryHandlers.GetRegistedCourseHandler;
 using static CQRSHandler.QueryHandlers.GetAvailableCoursesHandler;
+using static CQRSHandler.QueryHandlers.GetRegistrationTimeLineHandler;
+using static CQRSHandler.CommandHandlers.SetRegistrationTimeLineHandler;
 using CQRSHandler.Queries;
 using DAL.Aggregates;
 using CQRSHandler.Commands;
+using CQRSHandler.Domains;
 
 namespace BLL.Services
 {
@@ -77,6 +80,11 @@ namespace BLL.Services
             }
         }
 
+        public string FinishRegistCourseForAllStudent()
+        {
+            throw new NotImplementedException();
+        }
+
         public List<Course>? GetAvailableCourses(string user_id)
         {
             try
@@ -127,6 +135,21 @@ namespace BLL.Services
             }
         }
 
+        public RegistrationTimelineResponse? GetRegistrationTimeLineService()
+        {
+            try
+            {
+                var query = new GetRegistrationTimeLine();
+                List<GetRegistrationTimeLineRecord> list_time_line = Handle(query, _sharedRepositories.DapperContext).ToList();
+
+                return _mapper.Map<RegistrationTimelineResponse>(list_time_line[0]);
+            }
+            catch(Exception e)
+            {
+                throw new ResourceNotFoundException(e.Message);
+            }
+        }
+
         public RegisterCourseResponse RegisterCourseForStudent(RegisterCourseRequest request, string user_id)
         {
             try
@@ -144,6 +167,25 @@ namespace BLL.Services
                 return _mapper.Map<RegisterCourseResponse>(request);
             }
             catch (Exception e)
+            {
+                throw new ResourceConflictException(e.Message);
+            }
+        }
+
+        public RegistrationTimelineResponse? SetRegistrationTimeLineService(SetRegistrationTimeLineRequest request)
+        {
+            try
+            {
+                SetRegistrationTimeLine param = new SetRegistrationTimeLine()
+                {
+                    StartDate = request.StartDate,
+                    EndDate = request.EndDate
+                };
+
+                Handle(param, _sharedRepositories.DapperContext);
+                return new RegistrationTimelineResponse() { StartDate = param.StartDate, EndDate = param.EndDate, Finished = false };
+            }
+            catch(Exception e)
             {
                 throw new ResourceConflictException(e.Message);
             }

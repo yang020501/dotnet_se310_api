@@ -5,6 +5,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using BLL.DTOs.RegisterCourses;
+using CQRSHandler.Domains;
 
 namespace BLL.Mapping
 {
@@ -14,6 +15,7 @@ namespace BLL.Mapping
         {
             config.CreateMap<RegisterCourseRequest, RegisterCourseResponse>();
             config.CreateMap<CancelRegistedCourseRequest, CancelRegistedCourseResponse>();
+            config.CreateMap<GetRegistrationTimeLineRecord, RegistrationTimelineResponse>();
         }
     }
 }

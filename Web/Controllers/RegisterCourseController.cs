@@ -152,5 +152,23 @@ namespace Presentation.Controllers
                 return BadRequest(e.Message);
             }
         }
+
+        [Authorize(Roles = "mod")]
+        [HttpGet, Route("registration-timeline")]
+        public IActionResult GetRegistrationTimeLineAPI()
+        {
+            try
+            {
+                return Ok(_registerCourseService.GetRegistrationTimeLineService());
+            }
+            catch (BaseCustomApplicationException e)
+            {
+                return SharedControllerMethods.HandleExceptions(e, this);
+            }
+            catch (Exception e)
+            {
+                return BadRequest(e.Message);
+            }
+        }
     }
 }
