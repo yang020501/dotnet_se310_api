@@ -240,6 +240,15 @@ go
 drop procedure GetAvailableCourses
 go
 
+-- procedure for delete available course (to handle foreign key error when delete a course)
+create procedure DeleteAvailableCourse @Id UNIQUEIDENTIFIER
+as
+    BEGIN
+        delete from [dbo].[AvailableCourse] where Course = @Id
+    END
+GO
+
+drop procedure DeleteAvailableCourse
 -- procedure for transfer all registration into course_user
     -- command
 create procedure TransferAllRegisteredCourse
