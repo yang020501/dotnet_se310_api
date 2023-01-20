@@ -184,7 +184,20 @@ go
 
 drop procedure AddAvailableCourse
 go
+-- Procedure for add courses using JSON
+create procedure AddAvailableCourses @Json nvarchar(max)
+AS
+    begin
+        insert into [dbo].[AvailableCourse] (Course,CourseStatus)
+            select Course,0 as CourseStatus from openjson(@Json)
+            with (
+                Course UNIQUEIDENTIFIER '$.Id'
+            )
+    END
+go
 
+drop procedure AddAvailableCourses
+go
 -- Procedure for Lock Particular course (make it not visible to Register)
     -- command
 create procedure LockAvailableCourse @Id UNIQUEIDENTIFIER
@@ -324,6 +337,42 @@ EXEC DeleteRegistration @Json=@test
 
 -- Test add available course
 EXEC AddAvailableCourse @CourseId ='60e63f23-a73c-41ac-b669-acda565413dd'
+
+-- Test add available courses
+declare @test nvarchar(max)
+set @test = N'[
+    {
+        "Id":"e1397a21-d2e1-4fa4-b1ac-e547cb98d34f",
+        "Coursename":"Test Inserted Course 1",
+        "LectureId":"1fafd4f4-434f-4810-a6df-e234a78e6171",
+        "Coursecode":"TIC01",
+        "BeginDate":"2023-01-16",
+        "EndDate":"2023-01-23",
+        "Session":"1",
+        "DateOfWeek":"1"
+    },
+    {
+        "Id":"370f3a2c-135f-4d0f-937e-3ef8aa90c01d",
+        "Coursename":"Test Inserted Course 2",
+        "LectureId":"1fafd4f4-434f-4810-a6df-e234a78e6171",
+        "Coursecode":"TIC02",
+        "BeginDate":"2023-01-16",
+        "EndDate":"2023-01-23",
+        "Session":"0",
+        "DateOfWeek":"1"
+    },
+    {
+        "Id":"a33c75b3-d1aa-4600-b5ed-c5920ab3c1ef",
+        "Coursename":"Test Inserted Course 3",
+        "LectureId":"1fafd4f4-434f-4810-a6df-e234a78e6171",
+        "Coursecode":"TIC03",
+        "BeginDate":"2023-01-16",
+        "EndDate":"2023-01-23",
+        "Session":"0",
+        "DateOfWeek":"0"
+    }
+]'
+EXEC AddAvailableCourses @Json = @test
 
 -- Test lock all course
 EXEC LockAllCurrentAvailableCourse
