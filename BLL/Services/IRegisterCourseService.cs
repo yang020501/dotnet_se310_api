@@ -17,6 +17,7 @@ namespace BLL.Services
         public List<Course>? GetAvailableCourses(string user_id);
         public RegistrationTimelineResponse? GetRegistrationTimeLineService();
         public RegistrationTimelineResponse? SetRegistrationTimeLineService(SetRegistrationTimeLineRequest request);
-        public string FinishRegistCourseForAllStudent(); 
+        public Boolean IsRegistrationTimeLineRight();
+        public Boolean FinishRegistCourseForAllStudent(); 
     }
 }
