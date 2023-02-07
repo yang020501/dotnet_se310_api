@@ -12,6 +12,9 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using CQRSHandler.Commands;
+using static CQRSHandler.CommandHandlers.CreateAvailableCoursesForRegistrationHandler;
+using System.Text.Json;
 
 namespace BLL.Services
 {
@@ -52,6 +55,11 @@ namespace BLL.Services
                 {
                     _commonService.AssignLecturerToCourse(lecturer, newCourse);
                 }
+
+                CourseDTO dto = _mapper.Map<CourseDTO>(newCourse);
+                string json = JsonSerializer.Serialize<CourseDTO>(dto);
+                var param = new CreateAvailableCourse() { Json = json };
+                Handle(param, _sharedRepositories.DapperContext);
 
                 var respone = _mapper.Map<CreateCourseRespone>(newCourse);
 
