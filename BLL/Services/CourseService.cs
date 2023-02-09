@@ -14,6 +14,7 @@ using System.Text;
 using System.Threading.Tasks;
 using CQRSHandler.Commands;
 using static CQRSHandler.CommandHandlers.CreateAvailableCoursesForRegistrationHandler;
+using static CQRSHandler.CommandHandlers.AddAvailableCoursesHandler;
 using System.Text.Json;
 
 namespace BLL.Services
@@ -58,7 +59,7 @@ namespace BLL.Services
 
                 CourseDTO dto = _mapper.Map<CourseDTO>(newCourse);
                 string json = JsonSerializer.Serialize<CourseDTO>(dto);
-                var param = new CreateAvailableCourse() { Json = json };
+                var param = new AddAvailableCourses() { Json = json };
                 Handle(param, _sharedRepositories.DapperContext);
 
                 var respone = _mapper.Map<CreateCourseRespone>(newCourse);
@@ -70,6 +71,19 @@ namespace BLL.Services
                 throw new ResourceConflictException(e.Message); 
             }
 
+        }
+
+        public void CreateCoursesWithCSV(string? csv)
+        {
+            try
+            {
+                var param = new CreateAvailableCourse() { Json = csv };
+                Handle(param, _sharedRepositories.DapperContext);
+            }
+            catch (Exception e)
+            {
+                throw new ResourceConflictException(e.Message);
+            }
         }
 
         public Guid DeleteCourseById(Guid? id)
