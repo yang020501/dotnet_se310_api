@@ -16,6 +16,7 @@ namespace BLL.Mapping
             config.CreateMap<Course, CourseDTO>();
             config.CreateMap<CreateCourseRequest, Course>().AfterMap((source, destination) => destination.Id = Guid.NewGuid());
             config.CreateMap<Course, CreateCourseRespone>();
+            config.CreateMap<CourseCSV, Course>().AfterMap((source, destination) => destination.Id = Guid.NewGuid());
         }
     }
 }

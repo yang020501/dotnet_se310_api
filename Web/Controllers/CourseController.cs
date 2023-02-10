@@ -146,7 +146,7 @@ namespace Presentation.Controllers
 
         [Authorize(Roles = "mod")]
         [HttpPost, Route("create-courses-with-csv")]
-        public IActionResult CreateCourseWithCSV([FromBody] List<CreateCourseRequest>? csv)
+        public IActionResult CreateCourseWithCSV([FromBody] List<CourseCSV>? csv)
         {
             try
             {

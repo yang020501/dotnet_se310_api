@@ -73,7 +73,7 @@ namespace BLL.Services
 
         }
 
-        public void CreateCoursesWithCSV(List<CreateCourseRequest> csv)
+        public void CreateCoursesWithCSV(List<CourseCSV> csv)
         {
             try
             {
