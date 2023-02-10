@@ -17,7 +17,7 @@ namespace BLL.Services
         public Guid DeleteCourseById(Guid? id);
         public CourseDTO EditCourse(CourseDTO course);
         public CourseDTO? GetCourseById(Guid? id);
-        public void CreateCoursesWithCSV(string? csv);
+        public void CreateCoursesWithCSV(List<CreateCourseRequest>? csv);
    
 
     }

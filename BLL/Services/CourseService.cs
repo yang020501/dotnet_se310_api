@@ -73,11 +73,13 @@ namespace BLL.Services
 
         }
 
-        public void CreateCoursesWithCSV(string? csv)
+        public void CreateCoursesWithCSV(List<CreateCourseRequest> csv)
         {
             try
             {
-                var param = new CreateAvailableCourse() { Json = csv };
+                List<Course> list = _mapper.Map<List<Course>>(csv);
+                string json = JsonSerializer.Serialize<List<Course>>(list);
+                var param = new CreateAvailableCourse() { Json = json };
                 Handle(param, _sharedRepositories.DapperContext);
             }
             catch (Exception e)
