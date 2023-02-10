@@ -144,6 +144,23 @@ namespace Presentation.Controllers
             }
         }
 
-
+        [Authorize(Roles = "mod")]
+        [HttpPost, Route("create-courses-with-csv")]
+        public IActionResult CreateCourseWithCSV([FromBody] List<CreateCourseRequest>? csv)
+        {
+            try
+            {
+                _courseService.CreateCoursesWithCSV(csv);
+                return Ok();
+            }
+            catch (BaseCustomApplicationException e)
+            {
+                return Shared.SharedControllerMethods.HandleExceptions(e, this);
+            }
+            catch (Exception e)
+            {
+                return BadRequest(e);
+            }
+        }
     }
 }

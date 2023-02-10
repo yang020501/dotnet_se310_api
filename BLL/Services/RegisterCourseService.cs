@@ -15,6 +15,7 @@ using static CQRSHandler.QueryHandlers.GetRegistedCourseHandler;
 using static CQRSHandler.QueryHandlers.GetAvailableCoursesHandler;
 using static CQRSHandler.QueryHandlers.GetRegistrationTimeLineHandler;
 using static CQRSHandler.CommandHandlers.SetRegistrationTimeLineHandler;
+using static CQRSHandler.CommandHandlers.FinishCourseRegistrationHandler;
 using CQRSHandler.Queries;
 using DAL.Aggregates;
 using CQRSHandler.Commands;
@@ -80,9 +81,18 @@ namespace BLL.Services
             }
         }
 
-        public string FinishRegistCourseForAllStudent()
+        public Boolean FinishRegistCourseForAllStudent()
         {
-            throw new NotImplementedException();
+            try
+            {
+                var param = new FinishCourseRegistration();
+                Handle(param, _sharedRepositories.DapperContext);
+                return true;
+            }
+            catch(Exception e)
+            {
+                throw new ResourceConflictException(e.Message);
+            }
         }
 
         public List<Course>? GetAvailableCourses(string user_id)
@@ -143,6 +153,26 @@ namespace BLL.Services
                 List<GetRegistrationTimeLineRecord> list_time_line = Handle(query, _sharedRepositories.DapperContext).ToList();
 
                 return _mapper.Map<RegistrationTimelineResponse>(list_time_line[0]);
+            }
+            catch(Exception e)
+            {
+                throw new ResourceNotFoundException(e.Message);
+            }
+        }
+
+        public bool IsRegistrationTimeLineRight()
+        {
+            try
+            {
+                var query = new GetRegistrationTimeLine();
+                List<GetRegistrationTimeLineRecord> list_time_line = Handle(query, _sharedRepositories.DapperContext).ToList();
+                DateTime now = DateTime.Now;
+                if (list_time_line[0].EndDate >= now && list_time_line[0].StartDate <= now)
+                {
+                    return true;
+                }
+
+                return false;
             }
             catch(Exception e)
             {

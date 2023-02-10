@@ -153,13 +153,74 @@ namespace Presentation.Controllers
             }
         }
 
-        [Authorize(Roles = "mod")]
-        [HttpGet, Route("registration-timeline")]
+        //Test API for get registationtimeline demo
+        [AllowAnonymous]
+        [HttpGet, Route("get-registration-timeline")]
         public IActionResult GetRegistrationTimeLineAPI()
         {
             try
             {
                 return Ok(_registerCourseService.GetRegistrationTimeLineService());
+            }
+            catch (BaseCustomApplicationException e)
+            {
+                return SharedControllerMethods.HandleExceptions(e, this);
+            }
+            catch (Exception e)
+            {
+                return BadRequest(e.Message);
+            }
+        }
+
+        [AllowAnonymous]
+        [HttpGet, Route("check-registration-timeline")]
+        public IActionResult CheckRegistrationTimeLineAPI()
+        {
+            try
+            {
+                if (_registerCourseService.IsRegistrationTimeLineRight())
+                {
+                    return Ok();
+                }
+                
+                return StatusCode(404);
+            }
+            catch (BaseCustomApplicationException e)
+            {
+                return SharedControllerMethods.HandleExceptions(e, this);
+            }
+            catch (Exception e)
+            {
+                return BadRequest(e.Message);
+            }
+        }
+
+        [Authorize(Roles = "mod")]
+        [HttpPost, Route("set-registration-timeline")]
+        public IActionResult SetRegistrationTimeLineAPI([FromBody] SetRegistrationTimeLineRequest request)
+        {
+            try
+            {
+                return Ok(_registerCourseService.SetRegistrationTimeLineService(request));
+            }
+            catch (BaseCustomApplicationException e)
+            {
+                return SharedControllerMethods.HandleExceptions(e, this);
+            }
+            catch (Exception e)
+            {
+                return BadRequest(e.Message);
+            }
+        }
+
+        [Authorize(Roles = "mod")]
+        [HttpPost, Route("finalize-courses-registraiton")]
+        public IActionResult FinalizeCourseRegistraiotn()
+        {
+            try
+            {
+                _registerCourseService.FinishRegistCourseForAllStudent();
+                return Ok();
             }
             catch (BaseCustomApplicationException e)
             {
