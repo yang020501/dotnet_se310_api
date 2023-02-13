@@ -32,7 +32,20 @@ namespace BLL.Services
             _mapper = mapper;
             _courseRepository = _sharedRepositories.RepositoriesManager.CourseRepository;
             _commonService = commonService;
-        }      
+        }
+
+        public List<Course>? CheckCreateCourseCSVFile(List<Course> checkList)
+        {
+            try
+            {
+                List<Course> courseList = new List<Course>();
+                courseList = _courseRepository.GetAll().ToList();
+            }
+            catch (Exception e)
+            {
+                throw new ResourceConflictException(e.Message);
+            }
+        }
 
         public CreateCourseRespone CreateCourse(CreateCourseRequest request)
         {
