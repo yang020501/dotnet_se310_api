@@ -40,6 +40,7 @@ namespace BLL.Services
             {
                 List<Course> courseList = new List<Course>();
                 courseList = _courseRepository.GetAll().ToList();
+                return courseList;
             }
             catch (Exception e)
             {
