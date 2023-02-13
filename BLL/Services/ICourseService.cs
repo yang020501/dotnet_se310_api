@@ -18,7 +18,7 @@ namespace BLL.Services
         public CourseDTO EditCourse(CourseDTO course);
         public CourseDTO? GetCourseById(Guid? id);
         public void CreateCoursesWithCSV(List<CourseCSV>? csv);
-   
+        public List<Course>? CheckCreateCourseCSVFile(List<Course> checkList);
 
     }
 }
